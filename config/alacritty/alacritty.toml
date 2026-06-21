@@ -182,6 +182,10 @@ white = "#ff0000"
 [mouse]
 hide_when_typing = false
 
+[[mouse.bindings]]
+mouse = "Middle"
+action = "Paste"
+
 # Key bindings (similar to your foot config)
 [[keyboard.bindings]]
 key = "V"
