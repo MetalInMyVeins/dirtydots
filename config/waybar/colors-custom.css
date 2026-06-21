@@ -1,7 +1,7 @@
 @define-color colorx1 #d6453c;
 @define-color colorx2 #ff5e54;
-/* @define-color colorx3 #67959a; /** cyan normal **/ */
-@define-color colorx3 #5e9499
+/* @define-color colorx3 #67959a; cyan normal **/
+@define-color colorx3 #5e9499;
 @define-color colorx4 #be6835; /** orange light **/
 @define-color colorx5 #a3582d; /** orange normal **/
 @define-color colorx6 #4f7a87; /** cyan dark **/
