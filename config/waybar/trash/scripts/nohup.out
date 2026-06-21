@@ -1,0 +1,8 @@
+[2024-07-03 23:03:26.390] [info] Using configuration file /home/metal888/.config/waybar/config.jsonc
+[2024-07-03 23:03:26.393] [info] Discovered appearance 'dark'
+[2024-07-03 23:03:26.393] [info] Using CSS file /home/metal888/.config/waybar/style.css
+[2024-07-03 23:03:26.399] [info] Hyprland IPC starting
+[2024-07-03 23:03:26.400] [info] Loading persistent workspaces from Hyprland workspace rules
+[2024-07-03 23:03:26.406] [warning] No battery named BAT2
+[2024-07-03 23:03:26.562] [warning] Requested height: 10 is less than the minimum height: 28 required by the modules
+[2024-07-03 23:03:26.562] [info] Bar configured (width: 1366, height: 28) for output: eDP-1

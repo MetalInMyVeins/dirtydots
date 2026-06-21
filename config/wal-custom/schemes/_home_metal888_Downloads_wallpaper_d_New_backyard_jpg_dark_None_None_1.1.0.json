@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/metal888/Downloads/wallpaper_d/New/backyard.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0E1417",
+        "foreground": "#8da7c9",
+        "cursor": "#8da7c9"
+    },
+    "colors": {
+        "color0": "#0E1417",
+        "color1": "#2A3350",
+        "color2": "#453C42",
+        "color3": "#1D4C64",
+        "color4": "#5C5858",
+        "color5": "#9F553C",
+        "color6": "#CCA856",
+        "color7": "#8da7c9",
+        "color8": "#62748c",
+        "color9": "#2A3350",
+        "color10": "#453C42",
+        "color11": "#1D4C64",
+        "color12": "#5C5858",
+        "color13": "#9F553C",
+        "color14": "#CCA856",
+        "color15": "#8da7c9"
+    }
+}

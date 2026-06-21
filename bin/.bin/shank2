@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/shank2/Shank.2/Game/bin/
+WINEPREFIX=~/.wine WINEARCH=win32 wine Shank2.exe
+
+

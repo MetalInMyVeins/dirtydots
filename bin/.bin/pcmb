@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Set the source directory
+source_dir="/home/metal888/.pcmb"
+
+# Check if at least one file name is provided as an argument
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <file1> [<file2> ...]"
+    exit 1
+fi
+
+# Check if the source directory exists
+if [ ! -d "$source_dir" ]; then
+    echo "Source directory '$source_dir' does not exist."
+    exit 1
+fi
+
+# Loop through the arguments (file names) and copy them
+for file in "$@"; do
+    if [ -f "$file" ]; then
+        cp "$file" "$source_dir"
+        echo "Copied '$file' to '$source_dir'."
+    else
+        echo "File '$file' does not exist or is not a regular file."
+    fi
+done
+

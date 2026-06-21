@@ -1,0 +1,11 @@
+[Unit]
+Description=Low Battery Sleep Activator
+
+[Timer]
+OnUnitActiveSec=5min
+Unit=susbat.service
+
+[Install]
+WantedBy=timers.target
+
+

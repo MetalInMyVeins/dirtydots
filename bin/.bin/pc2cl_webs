@@ -1,0 +1,10 @@
+#!/bin/bash
+
+7z a -mx=0 ~/webs.7z \
+  ~/websites/learncpp \
+  ~/websites/mathisfun
+
+rclone sync ~/webs.7z hossain66: -P
+rm ~/webs.7z
+
+

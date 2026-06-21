@@ -1,0 +1,12 @@
+#!/bin/bash
+# Copy Pdf_Files from cloud to pc
+
+tput setaf 4
+echo "This script is going to tranfer data according to the diagram below:"
+tput setaf 6
+echo "Drive     ---------->     PC"
+tput setaf 4
+echo "Folder: Pdf_Files"
+read -p "Confirmed to continue? (yes): " confirm && [[ $confirm == "yes" ]] || exit 1
+tput setaf 6
+rclone sync hossain8:Books ~/Books -P

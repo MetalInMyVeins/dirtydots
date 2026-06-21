@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# bd win64 > generates build files in buildwin64 directory
+# by using win64.cmake toolchain file
+
+toolchain_file="$1"
+debug_flag="$2"
+tput setaf 6
+
+if [ $# -eq 0 ]
+then
+  cmake -S . -B build -DDEBUG_BUILD=ON
+  cd build
+  colormake -j$(nproc)
+  cd ..
+  rn
+elif [ $# -eq 1 ]
+then
+  if [ "$toolchain_file" = "win64" ]
+  then
+    cmake -S . -B buildwin64 -DCMAKE_TOOLCHAIN_FILE=$toolchain_file".cmake" -DDEBUG_BUILD=ON
+    cd buildwin64
+    colormake -j$(nproc)
+    cd ..
+    rn win
+  else
+    tput setaf 1
+    echo "Toolchain file "$toolchain_file".cmake NOT found!"
+    exit 1
+  fi
+elif [ $# -eq 2 ]
+then
+  if [ "$toolchain_file" = "win64" ] && [ "$debug_flag" = "rel" ]
+  then
+    cmake -S . -B buildwin64 -DCMAKE_TOOLCHAIN_FILE=$toolchain_file".cmake" -DDEBUG_BUILD=OFF
+    cd buildwin64
+    colormake -j$(nproc)
+    cd ..
+    rn win
+  elif [ "$toolchain_file" = "win64" ] && [ "$debug_flag" = ]
+  then
+    cmake -S . -B buildwin64 -DCMAKE_TOOLCHAIN_FILE=$toolchain_file".cmake" -DDEBUG_BUILD=ON
+    cd buildwin64
+    colormake -j$(nproc)
+    cd ..
+    rn win
+  else
+    tput setaf 1
+    echo "Toolchain file "$toolchain_file".cmake NOT found or invalid debug flag!"
+    exit 1
+  fi
+fi
+
+

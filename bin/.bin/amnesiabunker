@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/HDD/Media/games_d/amnesia/Amnesia-The-Bunker-SteamRIP.com/"Amnesia - The Bunker"/
+WINEPREFIX=~/.wine64 WINEARCH=win64 wine AmnesiaTheBunker.exe
+
+

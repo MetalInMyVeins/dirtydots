@@ -1,0 +1,269 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    //"position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 10, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        "hyprland/workspaces",
+        "custom/dspeed",
+        "custom/uspeed",
+        "cpu",
+        "custom/fan",
+        "temperature"
+        //"custom/media"
+        //"hyprland/mode",
+        //"hyprland/scratchpad",
+    ],
+    "modules-center": [
+        //"hyprland/window",
+        "clock"
+    ],
+    "modules-right": [
+        //"mpd",
+        //"idle_inhibitor",
+        //"power-profiles-daemon",
+        //"cpu",
+        //"custom/fan",
+        //"temperature",
+        "custom/media",
+        "custom/ram",
+        "custom/ramperc",
+        //"memory",
+        "backlight",
+        //"keyboard-state",
+        //"sway/language",
+        "pulseaudio",
+        //"custom/audio",
+        "network",
+        "battery",
+        "battery#bat2"
+        //"clock",
+        //"tray"
+    ],
+    // Modules configuration
+     "hyprland/workspaces": {
+         "disable-scroll": true,
+         "all-outputs": true,
+         "warp-on-scroll": false,
+         "format": "{icon}",
+         "format-icons": {
+    //         "1": "",
+    //         "2": "",
+    //         "3": "",
+    //         "4": "",
+    //         "5": "",
+             "urgent": "",
+             "default": "",
+             "focused": ""
+             //"default": ""
+         }
+     },
+    /*"keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "unknown-tag": "N/A",
+        "interval": 5,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ",
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        // "icon-size": 21,
+        "items": ["discord", "slack", "telegram-desktop"],
+        "spacing": 10
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+        "tooltip-format": "<big>{:%Y %B :%S}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}"
+    },*/
+    "clock": {
+      //"format": "<span foreground='#C6AAE8'> </span>{:%a %d %I:%M:%S %p}",
+      "format": "<span foreground='#C6AAE8'></span>{:%a %d %I:%M:%S %p}",
+      "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+      "interval": 1
+    },
+    "custom/dspeed": {
+        "exec": "~/.config/waybar/scripts/dspeed.sh",
+        "format": "{}",
+        "interval": 1
+    },
+    "custom/uspeed": {
+        "exec": "~/.config/waybar/scripts/uspeed.sh",
+        "format": "{}",
+        "interval": 1
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false,
+        "interval": 1
+    },
+    "custom/fan": {
+        "exec": "~/.config/waybar/scripts/fan_speed.sh",
+        "format": "{}",
+        "interval": 7
+    },
+    "custom/media": {
+        "exec": "~/.config/waybar/scripts/media.sh",
+        "format": "{}",
+        "interval": 7
+    },
+    "custom/ram": {
+        "exec": "~/.config/waybar/scripts/ram.sh",
+        "format": "{}",
+        "interval": 7
+    },
+    "custom/ramperc": {
+        "exec": "~/.config/waybar/scripts/ramperc.sh",
+        "format": "{}",
+        "interval": 7
+    },
+    //"custom/audio": {
+    //    "exec": "~/.config/waybar/scripts/audio.sh",
+    //    "format": "{}",
+    //    "interval": 1
+    //},
+    //"memory": {
+        //"format": "{}% "
+    //    "format": "{}% 🎟",
+    //    "interval": 1
+    //},
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        // "format-critical": "{temperatureC}°C {icon}",
+        "critical-threshold": 80,
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": [""],
+        "interval": 1
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        //"format": "{percent}%",
+        //"format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format": "{percent}% {icon}",
+        "format-icons": ["🔆"],
+        "interval": 1
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""],
+        "interval": 1
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    /*"power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },*/
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        //"format-wifi": "{essid} ({signalStrength}%) ",
+        "format-wifi": "",
+        "format-ethernet": "{ipaddr}/{cidr}",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "format-linked": "{ifname} (No IP)",
+        //"format-disconnected": "Disconnected ⚠",
+        "format-disconnected": "‼",
+        "format-alt": "{essid} ({signalStrength}%) ",
+        //"interval": 10
+        //"format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}%  {format_source}",
+        "format-bluetooth-muted": "! {format_source}",
+        "format-muted": "{format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol",
+        "interval": 1
+    }
+    /*"custom/media": {
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 40,
+        "format-icons": {
+            "spotify": "",
+            "default": "🎜"
+        },
+        "escape": true
+        //"exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    }*/
+}

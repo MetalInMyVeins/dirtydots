@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/HDD/Media/games_d/hl1/Half-Life/
+WINEPREFIX=~/.wine WINEARCH=win32 wine hl.exe
+
+

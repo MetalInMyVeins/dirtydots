@@ -1,0 +1,5 @@
+#!/bin/bash
+
+WINEPREFIX=~/.wine WINEARCH=win32 WINEDEBUG=-all wine $@
+
+

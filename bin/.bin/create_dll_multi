@@ -1,0 +1,40 @@
+#!/bin/bash
+
+filenames=("$@")
+file_wo_ext=""
+object_files=""
+compiler="x86_64-w64-mingw32-g++ -std=c++20"
+
+for file in "${filenames[@]}"
+do
+  file_wo_ext=${file%.*}
+  ${compiler} -c ${file}
+done
+
+# Function to check if a file exists in the directory
+file_exists()
+{
+  [ -e "$1" ]
+}
+
+# Generate a random 3-character string and ensure it's unique
+random_string=""
+while true;
+do
+  random_string=$(openssl rand -base64 3 | tr -dc 'a-z' | head -c 3)
+  if [ ${#random_string} -eq 3 ] && ! file_exists "$random_string";
+  then
+    break
+  fi
+done
+
+for file in "${filenames[@]}"
+do
+  file_wo_ext=${file%.*}
+  object_files="${object_files} ${file_wo_ext}".o""
+done
+
+${compiler} -shared -static -o "lib"${random_string}".dll" ${object_files}
+rm *.o
+
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#cd ~/Media/games_d/portal2/Portal.2.v2023.03.14/Portal.2.v2023.03.14/
+cd ~/Media/games_d/portal/portal2/Portal-2-SteamRIP.com/"Portal 2"/
+WINEPREFIX=~/.wine WINEARCH=win32 wine portal2.exe
+
+

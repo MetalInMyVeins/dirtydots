@@ -1,0 +1,17 @@
+#!/bin/bash
+# Update all outdated packages in current venv.
+# Notice that this can break dependency.
+# Rather use `pip-outdated` to view outdated packages
+# and upgrade manually.
+
+outdated=$(pip list --outdated --format=json | jq -r '.[].name')
+
+echo "Upgrading packages..."
+for pkg in $outdated; do
+    echo "  ➤ Upgrading $pkg..."
+    pip install -U "$pkg"
+    echo
+done
+
+echo "All packages upgraded"
+

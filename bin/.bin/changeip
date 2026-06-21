@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Check if an argument is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <new_ip>"
+    exit 1
+fi
+
+# Assign the provided IP to the 'ip' variable
+new_ip=$1
+
+# Update the script content with the new IP
+sed -i "s/ip=.*/ip=$new_ip/" ~/.bin/l2m ~/.bin/l2ma
+
+echo "SSH destination IP updated to $new_ip"
+
+

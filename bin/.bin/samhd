@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/samhd/Serious.Sam.HD.The.Second.Encounter/"Serious Sam HD The Second Encounter"/Bin/
+WINEPREFIX=~/.wine WINEARCH=win32 wine SamHD_TSE.exe
+
+

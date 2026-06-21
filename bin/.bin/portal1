@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/portal1/Portal.v2022.11.19/Portal.v2022.11.19/
+WINEPREFIX=~/.wine WINEARCH=win32 wine Portal.exe
+
+

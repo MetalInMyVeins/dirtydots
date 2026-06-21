@@ -1,0 +1,231 @@
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 10, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        "hyprland/workspaces",
+        "cpu",
+        "temperature",
+        "custom/dspeed",
+        "custom/wspace"
+        //"custom/wtr"
+        //"custom/toproc"
+        //"custom/temp"
+    ],
+    "modules-center": [
+        "clock",
+        "custom/notification"
+    ],
+    "modules-right": [
+        //"custom/media",
+        "tray",
+        "custom/fanspeed",
+        "custom/mem",
+        "backlight",
+        "pulseaudio",
+        "network",
+        "battery"
+    ],
+    "hyprland/workspaces": {
+       "disable-scroll": true,
+       "all-outputs": true,
+       "warp-on-scroll": false,
+       "format": "{icon}",
+       "format-icons": {
+           "urgent": "",
+           "default": "",
+           "focused": ""
+           //"focused": ""
+           //"default": ""
+       }
+    },
+
+    "hyprland/window": {  
+    //"format": "{}"   // <--- these is the default value  
+    "format": "<span font='9' rise='-4444'>{hello}</span>"  
+    },
+
+    "cpu": {
+        "format": "  {usage}%   ",
+        "tooltip": true,
+        "interval": 1
+    },
+    /*"cpu": {
+      "format": "{usage_bar} {usage}%",
+      "format-icons": ["󰍛", "󰍜", "󰍝", "󰍞"],
+      "interval": 1,
+      "max-length": 100,
+      "tooltip": false,
+      "usage_bar": {
+        "filled-character": "█",
+        "empty-character": "░",
+        "width": 10
+      }
+    },*/
+
+    "custom/temp": {
+        "format": "{}",
+        "exec": "~/.config/waybar/bin/tempbin $(sensors | awk '/CPU:/ { print $2 }');exit 0",
+        "interval": 3
+    },
+    "temperature": {
+        //"thermal-zone": 2,
+        //"hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "format-critical": "  {temperatureC}°C {icon}  ",
+        "critical-threshold": 80,
+        "format": "  {temperatureC}°C   ",
+        "format-icons": ["", "", ""]
+        //"interval": 1
+    },
+    
+    "custom/dspeed": {
+        "format": "{}",
+        "exec": "~/.config/waybar/bin/dspeed.sh",
+        "interval": 2
+    },
+    
+    "custom/fanspeed": {
+        "format": "  ☢  {} rpm  ",
+        "exec": "sensors | awk '/fan1:/ {print $2}'",
+        "interval": 5
+    },
+    
+    "custom/wspace": {
+        "format": "   {}   ",
+        "exec": "~/.config/waybar/bin/wsp.sh",
+        "interval": 2
+    },
+    "custom/wtr": {
+        "format": "  {}  ",
+        "exec": "~/.config/waybar/bin/wtr.sh",
+        "interval": 600
+    },
+    
+    "custom/toproc": {
+        "format": "   {}   ",
+        "exec": "~/.config/waybar/bin/toproc.sh",
+        "interval": 3
+    },
+
+    "custom/notification": {
+    "tooltip": false,
+    "format": "  {icon}  ",
+    "format-icons": {
+      "notification": "<span foreground='red'><sup> </sup></span>",
+      "none": "",
+      "dnd-notification": "<span foreground='red'><sup> </sup></span>",
+      "dnd-none": "",
+      "inhibited-notification": "<span foreground='red'><sup> </sup></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "<span foreground='red'><sup> </sup></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+  },
+    
+    "clock": {
+        "format": "    <span foreground='#C6AAE8'></span>{:%a %d  %I:%M:%S  %p}    ",
+        "tooltip-format": "  <big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>  ",
+        "interval": 1
+    },
+
+    "tray" : {
+        "icon-size": 14,
+        "spacing": 5
+    },
+    
+    "custom/mem": {
+        "format": " 🎟{}",
+        "exec": "~/.config/waybar/bin/membin $(free -m | awk '/Mem:/ { print $3 }')",
+        "interval": 3
+    },
+    
+    //"custom/media": {
+    //    "format": "{}",
+    //    "exec": "~/.config/waybar/bin/media.sh",
+    //    "interval": 7
+    //},
+    
+    "backlight": {
+        "format": "  {percent}% 🔆  ",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    
+    "pulseaudio": {
+        "format": "  {volume}% {icon} {format_source} ",
+        "format-muted": "   {format_source}  ",
+        "format-bluetooth": "  {volume}%  {format_source}  ",
+        "format-bluetooth-muted": "  !! {format_source}  ",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol",
+        "interval": 1
+    },
+
+    "network": {
+        "format-wifi": "    ",
+        "format-ethernet": "  {ipaddr}/{cidr}   ",
+        "tooltip-format": "  {ifname} via {gwaddr}   ",
+        "format-linked": "  {ifname} (No IP)   ",
+        //"format-disconnected": "   !!  ",🌐
+        "format-disconnected": "   🌐   ",
+        "format-alt": "  {ifname}: {ipaddr}/{cidr}  "
+    },
+
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "  {capacity}% {icon}  ",
+        "format-full": "  {capacity}% {icon}  ",
+        "format-charging": "  {capacity}%   ",
+        "format-plugged": "  {capacity}%   ",
+        "format-alt": "  {time} {icon}  ",
+        "format-icons": ["", "", "", "", ""],
+        "interval": 1
+    }
+}
+
+
+/*"cava": {
+//        "cava_config": "$XDG_CONFIG_HOME/cava/cava.conf",
+        "framerate": 30,
+        "autosens": 1,
+        "sensitivity": 100,
+        "bars": 14,
+        "lower_cutoff_freq": 50,
+        "higher_cutoff_freq": 10000,
+        "method": "pulse",
+        "source": "auto",
+        "stereo": true,
+        "reverse": false,
+        "bar_delimiter": 0,
+        "monstercat": false,
+        "waves": false,
+        "noise_reduction": 0.77,
+        "input_delay": 2,
+        "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ],
+        "actions": {
+                   "on-click-right": "mode"
+                   }
+    },
+*/    

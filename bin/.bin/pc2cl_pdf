@@ -1,0 +1,18 @@
+#!/bin/bash
+# Backup Pdf_Files from pc to cloud
+
+tput setaf 4
+echo "This script is going to tranfer data according to the diagram below:"
+tput setaf 6
+echo "PC     ---------->     Drive"
+tput setaf 4
+echo "Folder: Pdf_Files"
+read -p "Confirmed to continue? (yes): " confirm && [[ $confirm == "yes" ]] || exit 1
+tput setaf 6
+#rclone sync ~/Books hossain8:Books --include "*.pdf" --include "*.epub" --include "*.ppt" \
+#  --include "*.pptx" --include "*.docx" --include "*.zip" --include "*.mobi" -P
+rclone sync ~/Books hossain8:Books --include "*.pdf" --include "*.epub" --include "*.ppt" \
+  --include "*.pptx" --include "*.docx" --include "*.mobi" -P
+#rclone sync ~/Books hossain8:Books --exclude "*.mp4" -P
+
+

@@ -1,0 +1,7 @@
+> qt issues was solved after installing qt6t-kde
+> applications menu works by running sudo ln -s /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu
+> set qt qpa platformtheme by setting it to qt6ct
+> setting up qt style override is not necessary
+> To preserve the size of waybar, choose adwaita-dark in nwg-look, not sweet. 
+
+

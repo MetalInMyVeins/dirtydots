@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/aoe/Age.of.Empires.II.HD.v5.8/"Age Of Empires II HD"/
+WINEPREFIX=~/.wine WINEARCH=win32 wine Launcher.exe
+
+

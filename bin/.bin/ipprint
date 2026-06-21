@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ip addr show wlp4s0 | grep -oP 'inet \K[\d.]+'
+
+

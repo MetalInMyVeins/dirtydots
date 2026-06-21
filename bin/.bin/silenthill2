@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/silenthill2_dircut/"Silent.Hill.2.Directors.Cut.PC.Game(djDEVASTATE™)"
+WINEPREFIX=~/.wine WINEARCH=win32 wine sh2pc.exe
+
+

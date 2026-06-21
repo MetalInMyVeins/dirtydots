@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Loop through the input file names
+for filename in "$@"; do
+  # Check if the file exists
+  if [ -f "$filename" ]; then
+    # Extract the base name of the file without the extension
+    basename="${filename%.s}"
+
+    # Assemble the assembly file to generate object file
+    as -o "$basename".o "$filename"
+    # Check if the assembling was successful
+    if [ $? != 0 ]; then
+      echo "Error assembling $filename"
+      continue
+    fi
+
+    # Link the object file to generate binary
+    ld -o "$basename"g "$basename".o
+    # Check if linking was successful
+    if [ $? == 0 ]; then
+      echo "Assembled $filename > $basename"
+      # Delete the generated object file
+      rm "$basename".o
+    elif [ $? != 0 ]; then
+      echo "Error linking $basename.o"
+    fi
+  
+  else
+    echo "File $filename doesn't exist"
+  fi
+done
+

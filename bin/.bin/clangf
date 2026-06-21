@@ -1,0 +1,5 @@
+#!/bin/bash
+# run clang with the flags
+
+clang++ -std=c++20 -g -Wall -Wextra -Wpedantic -Werror $@
+

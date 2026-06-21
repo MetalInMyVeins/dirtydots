@@ -1,0 +1,67 @@
+{
+    "layer": "top",
+    "position": "top", 
+    "height": 10
+    //"modules-left": ["hyprland/workspaces"],
+   // "modules-center": ["clock"],
+    /*"modules-right": ["cpu", "network", "custom/vpn", "pulseaudio", "battery", "clock"],*/
+    //"modules-right": ["cpu", "battery"],
+    // Modules configuration
+	"hyprland/workspaces":
+  {
+		"disable-scroll": true,
+		"all-outputs": true,
+		"format": "{icon}",
+	 	"persistent_workspaces":
+    {
+	 		"1": [],
+	 		"2": [],
+	 		"3": [],
+	 		"4": [],
+	 		"5": [],
+	 		"6": [],
+	 		"7": [],
+	 		"8": [],
+	 		"9": [],
+	 		"10": []
+	  },
+    "format-icons":
+    {
+      "default": "",
+      "urgent": "",
+      "focused": ""
+    }
+  },
+	"clock":
+  {
+		"format": "<span foreground='#C6AAE8'> </span>{:%a %d %H:%M:%S}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+	},
+	"battery":
+  {
+    "states":
+    {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "<span size='13000' foreground='#B1E3AD'>{icon}</span> {capacity}%",
+    "format-warning": "<span size='13000' foreground='#B1E3AD'>{icon}</span> {capacity}%",
+    "format-critical": "<span size='13000' foreground='#E38C8F'>{icon}</span> {capacity}%",
+    "format-charging": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
+    "format-plugged": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
+    "format-alt": "<span size='13000' foreground='#B1E3AD'>{icon}</span> {time}",
+    "format-full": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
+      "format-icons": ["", "", "", "", ""], "tooltip-format": "{time}"
+	},
+  "cpu": {
+    "interval": 1,
+    "format": "{icon0} {icon1} {icon2} {icon3}",
+    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+  }
+}
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/metal888/Downloads/wallpaper_d/planet_meteors.jpeg",
+    "alpha": "100",
+    "special": {
+        "background": "#0F0C0B",
+        "foreground": "#c9c8c8",
+        "cursor": "#c9c8c8"
+    },
+    "colors": {
+        "color0": "#0F0C0B",
+        "color1": "#525B61",
+        "color2": "#A85524",
+        "color3": "#C3945A",
+        "color4": "#54748A",
+        "color5": "#9369AC",
+        "color6": "#6891AA",
+        "color7": "#c9c8c8",
+        "color8": "#8c8c8c",
+        "color9": "#525B61",
+        "color10": "#A85524",
+        "color11": "#C3945A",
+        "color12": "#54748A",
+        "color13": "#9369AC",
+        "color14": "#6891AA",
+        "color15": "#c9c8c8"
+    }
+}

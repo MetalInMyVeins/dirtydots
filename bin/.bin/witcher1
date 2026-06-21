@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/HDD/Media/games_d/"The Witcher Enhanced Edition"/
+WINEPREFIX=~/.wine WINEARCH=win32 wine launcher.exe
+
+

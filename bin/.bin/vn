@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ -f vimbin ]
+then
+  tput setaf 12
+  echo "RUNNING vimbin...."
+  #tput sgr0
+  tput setaf 45
+  ./vimbin
+else
+  tput setaf 1
+  echo "vimbin NOT found in current directory"
+  tput sgr0
+fi
+
+

@@ -1,0 +1,23 @@
+" Special
+let wallpaper  = "/home/metal888/Downloads/wallpaper_d/New/cozyhome.jpg"
+let background = "#1e180c"
+let foreground = "#c6c5c2"
+let cursor     = "#c6c5c2"
+
+" Colors
+let color0  = "#1e180c"
+let color1  = "#715543"
+let color2  = "#9A5831"
+let color3  = "#B3562A"
+let color4  = "#9D6B47"
+let color5  = "#DEA862"
+let color6  = "#DBAD67"
+let color7  = "#c6c5c2"
+let color8  = "#70695c"
+let color9  = "#715543"
+let color10 = "#9A5831"
+let color11 = "#B3562A"
+let color12 = "#9D6B47"
+let color13 = "#DEA862"
+let color14 = "#DBAD67"
+let color15 = "#c6c5c2"

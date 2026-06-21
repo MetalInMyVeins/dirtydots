@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/hl2/Half.Life.2/Half.Life.2
+WINEPREFIX=~/.wine WINEARCH=win32 wine hl2.exe
+
+

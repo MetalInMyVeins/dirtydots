@@ -1,0 +1,9 @@
+#!/bin/bash
+
+swww img $1
+wal -i $1
+cp ~/.cache/wal/colors-waybar.css ~/.config/waybar
+cp ~/.cache/wal/colors-tilix.json ~/.config/tilix/schemes/pywal.json
+cp ~/.cache/wal/colors-foot.ini ~/.config/foot/colors-foot.ini
+
+

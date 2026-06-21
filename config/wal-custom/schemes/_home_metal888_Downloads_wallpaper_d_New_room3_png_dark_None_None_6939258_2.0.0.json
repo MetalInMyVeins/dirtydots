@@ -1,0 +1,28 @@
+{
+    "checksum": "7241a52feab3e84eb92b1405958e2d71",
+    "wallpaper": "/home/metal888/Downloads/wallpaper_d/New/room3.png",
+    "alpha": "100",
+    "special": {
+        "background": "#150909",
+        "foreground": "#c4c1c1",
+        "cursor": "#c4c1c1"
+    },
+    "colors": {
+        "color0": "#150909",
+        "color1": "#3D4260",
+        "color2": "#4B4E67",
+        "color3": "#9C5728",
+        "color4": "#B4622D",
+        "color5": "#E49D4F",
+        "color6": "#E0A055",
+        "color7": "#c4c1c1",
+        "color8": "#6c5858",
+        "color9": "#3D4260",
+        "color10": "#4B4E67",
+        "color11": "#9C5728",
+        "color12": "#B4622D",
+        "color13": "#E49D4F",
+        "color14": "#E0A055",
+        "color15": "#c4c1c1"
+    }
+}

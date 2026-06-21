@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ldd $1 | grep '=>' | awk '{print $3}' | xargs -I '{}' cp -v '{}' $2
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+printf "1 | exit | eax, 0x01 | ebx, int error_code
+3 | read | eax, 0x03 | ebx, unsigned int fd | ecx, char* buf | edx, size_t count
+4 | write | eax, 0x04 | ebx, unsigned int fd | ecx, const char* buf | edx, size_t count
+5 | open | eax, 0x05 | ebx, const char *filename | ecx, int flags | edx, umode_t mode"
+
+

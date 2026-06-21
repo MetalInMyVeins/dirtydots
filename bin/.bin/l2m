@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Check if there are no arguments
+if [ "$#" -eq 0 ]; then
+  echo "No files provided to be sent. Provide at least one."
+  exit 1
+fi
+
+ip=10.200.33.9
+scp -P 8022 $@ u0_a172@$ip:/storage/emulated/0/ssh
+
+

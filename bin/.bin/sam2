@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/sam2/Serious.Sam.2.v2.091/Serious.Sam.2.v2.091/Bin/
+WINEPREFIX=~/.wine WINEARCH=win32 wine Sam2.exe
+
+

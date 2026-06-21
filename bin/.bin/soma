@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/SOMA/
+WINEPREFIX=~/.wine64 WINEARCH=win64 wine Soma.exe
+
+

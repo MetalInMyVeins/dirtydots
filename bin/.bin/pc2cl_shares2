@@ -1,0 +1,14 @@
+#!/bin/bash
+# Backup Pdf_Files from pc to cloud
+
+tput setaf 4
+echo "This script is going to tranfer data according to the diagram below:"
+tput setaf 6
+echo "PC     ---------->     Drive"
+tput setaf 4
+echo "Folder: Shares2"
+read -p "Confirmed to continue? (yes): " confirm && [[ $confirm == "yes" ]] || exit 1
+tput setaf 6
+rclone sync ~/Shares2 sustdrive:Shares2 -P
+
+

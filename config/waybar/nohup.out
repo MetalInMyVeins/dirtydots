@@ -1,0 +1,94 @@
+[2025-07-12 13:38:15.131] [info] Using configuration file /home/metal888/.config/waybar/config.jsonc
+[2025-07-12 13:38:15.135] [info] Discovered appearance 'dark'
+[2025-07-12 13:38:15.136] [info] Using CSS file /home/metal888/.config/waybar/style.css
+
+(waybar:70644): Gtk-WARNING **: 13:38:15.137: Theme parsing error: style.css:366:14: Not using units is deprecated. Assuming 'px'.
+
+(waybar:70644): Gtk-WARNING **: 13:38:15.137: Theme parsing error: style.css:371:14: Not using units is deprecated. Assuming 'px'.
+[2025-07-12 13:38:15.146] [info] Hyprland IPC starting
+[2025-07-12 13:38:15.147] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 13:38:15.457] [warning] Requested height: 10 is less than the minimum height: 28 required by the modules
+[2025-07-12 13:38:15.457] [info] Bar configured (width: 1366, height: 28) for output: eDP-1
+[2025-07-12 13:39:59.944] [info] Using configuration file /home/metal888/.config/waybar/config.jsonc
+[2025-07-12 13:39:59.949] [info] Discovered appearance 'dark'
+[2025-07-12 13:39:59.949] [info] Using CSS file /home/metal888/.config/waybar/style.css
+
+(waybar:71494): Gtk-WARNING **: 13:39:59.950: Theme parsing error: style.css:366:14: Not using units is deprecated. Assuming 'px'.
+
+(waybar:71494): Gtk-WARNING **: 13:39:59.950: Theme parsing error: style.css:371:14: Not using units is deprecated. Assuming 'px'.
+[2025-07-12 13:39:59.959] [info] Hyprland IPC starting
+[2025-07-12 13:39:59.960] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 13:40:00.269] [warning] Requested height: 10 is less than the minimum height: 28 required by the modules
+[2025-07-12 13:40:00.269] [info] Bar configured (width: 1366, height: 28) for output: eDP-1
+
+** (waybar:71494): WARNING **: 13:40:31.463: Status Notifier Host with bus name ':1.195' and object path '/StatusNotifierHost/0' is already registered
+Gdk-Message: 14:24:15.073: Unable to load arrow from the cursor theme
+Gdk-Message: 14:24:15.150: Unable to load arrow from the cursor theme
+Gdk-Message: 14:24:16.099: Unable to load arrow from the cursor theme
+Gdk-Message: 14:24:17.251: Unable to load arrow from the cursor theme
+Gdk-Message: 14:24:17.420: Unable to load arrow from the cursor theme
+[2025-07-12 18:57:36.428] [info] Hyprland config reloaded, reinitializing hyprland/workspaces module...
+[2025-07-12 18:57:36.430] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 18:58:37.158] [info] Hyprland config reloaded, reinitializing hyprland/workspaces module...
+[2025-07-12 18:58:37.160] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 18:59:01.021] [info] Hyprland config reloaded, reinitializing hyprland/workspaces module...
+[2025-07-12 18:59:01.040] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 19:01:33.414] [info] Hyprland config reloaded, reinitializing hyprland/workspaces module...
+[2025-07-12 19:01:33.417] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 19:01:58.146] [info] Hyprland config reloaded, reinitializing hyprland/workspaces module...
+[2025-07-12 19:01:58.149] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 19:02:37.022] [info] Hyprland config reloaded, reinitializing hyprland/workspaces module...
+[2025-07-12 19:02:37.045] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 19:02:38.261] [info] Hyprland config reloaded, reinitializing hyprland/workspaces module...
+[2025-07-12 19:02:38.263] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 19:03:09.026] [info] Hyprland config reloaded, reinitializing hyprland/workspaces module...
+[2025-07-12 19:03:09.042] [info] Loading persistent workspaces from Hyprland workspace rules
+
+** (waybar:71494): WARNING **: 19:05:05.428: Status Notifier Host with bus name ':1.195' and object path '/StatusNotifierHost/0' is already registered
+[2025-07-12 19:06:58.973] [info] Using configuration file /home/metal888/.config/waybar/config.jsonc
+[2025-07-12 19:06:58.976] [info] Discovered appearance 'dark'
+[2025-07-12 19:06:58.976] [info] Using CSS file /home/metal888/.config/waybar/style.css
+
+(waybar:236910): Gtk-WARNING **: 19:06:58.976: Theme parsing error: style.css:366:14: Not using units is deprecated. Assuming 'px'.
+
+(waybar:236910): Gtk-WARNING **: 19:06:58.976: Theme parsing error: style.css:371:14: Not using units is deprecated. Assuming 'px'.
+[2025-07-12 19:06:58.980] [info] Hyprland IPC starting
+[2025-07-12 19:06:58.981] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 19:06:59.148] [error] Host: GDBus.Error:org.freedesktop.DBus.Error.UnknownObject: No such object path '/StatusNotifierWatcher'
+[2025-07-12 19:06:59.205] [warning] Requested height: 10 is less than the minimum height: 28 required by the modules
+[2025-07-12 19:06:59.205] [info] Bar configured (width: 1366, height: 28) for output: eDP-1
+[2025-07-12 19:07:56.709] [info] Using configuration file /home/metal888/.config/waybar/config.jsonc
+[2025-07-12 19:07:56.712] [info] Discovered appearance 'dark'
+[2025-07-12 19:07:56.712] [info] Using CSS file /home/metal888/.config/waybar/style.css
+
+(waybar:237269): Gtk-WARNING **: 19:07:56.712: Theme parsing error: style.css:366:14: Not using units is deprecated. Assuming 'px'.
+
+(waybar:237269): Gtk-WARNING **: 19:07:56.712: Theme parsing error: style.css:371:14: Not using units is deprecated. Assuming 'px'.
+[2025-07-12 19:07:56.716] [info] Hyprland IPC starting
+[2025-07-12 19:07:56.717] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 19:07:56.929] [warning] Requested height: 10 is less than the minimum height: 28 required by the modules
+[2025-07-12 19:07:56.929] [info] Bar configured (width: 1366, height: 28) for output: eDP-1
+[2025-07-12 19:07:56.929] [error] Host: GDBus.Error:org.freedesktop.DBus.Error.UnknownObject: No such object path '/StatusNotifierWatcher'
+[2025-07-12 19:10:01.719] [info] Using configuration file /home/metal888/.config/waybar/config.jsonc
+[2025-07-12 19:10:01.722] [info] Discovered appearance 'dark'
+[2025-07-12 19:10:01.722] [info] Using CSS file /home/metal888/.config/waybar/style.css
+
+(waybar:237970): Gtk-WARNING **: 19:10:01.722: Theme parsing error: style.css:366:14: Not using units is deprecated. Assuming 'px'.
+
+(waybar:237970): Gtk-WARNING **: 19:10:01.722: Theme parsing error: style.css:371:14: Not using units is deprecated. Assuming 'px'.
+[2025-07-12 19:10:01.726] [info] Hyprland IPC starting
+[2025-07-12 19:10:01.727] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 19:10:01.940] [warning] Requested height: 10 is less than the minimum height: 28 required by the modules
+[2025-07-12 19:10:01.940] [info] Bar configured (width: 1366, height: 28) for output: eDP-1
+[2025-07-12 19:10:01.941] [error] Host: GDBus.Error:org.freedesktop.DBus.Error.UnknownObject: No such object path '/StatusNotifierWatcher'
+[2025-07-12 21:49:51.044] [info] Reloading...
+[2025-07-12 21:49:51.048] [info] Using configuration file /home/metal888/.config/waybar/config.jsonc
+[2025-07-12 21:49:51.049] [info] Using CSS file /home/metal888/.config/waybar/style.css
+
+(waybar:237970): Gtk-WARNING **: 21:49:51.049: Theme parsing error: style.css:367:14: Not using units is deprecated. Assuming 'px'.
+
+(waybar:237970): Gtk-WARNING **: 21:49:51.049: Theme parsing error: style.css:372:14: Not using units is deprecated. Assuming 'px'.
+[2025-07-12 21:49:51.057] [info] Loading persistent workspaces from Hyprland workspace rules
+[2025-07-12 21:49:51.192] [error] Host: GDBus.Error:org.freedesktop.DBus.Error.UnknownObject: No such object path '/StatusNotifierWatcher'
+[2025-07-12 21:49:51.193] [warning] Requested height: 10 is less than the minimum height: 28 required by the modules
+[2025-07-12 21:49:51.193] [info] Bar configured (width: 1366, height: 28) for output: eDP-1

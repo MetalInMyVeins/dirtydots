@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./gradlew build
+pkill -f java
+

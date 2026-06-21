@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/starsector/Starsector.v0.96a/Starsector.v0.96a/
+WINEPREFIX=~/.wine WINEARCH=win32 wine starsector.exe
+
+

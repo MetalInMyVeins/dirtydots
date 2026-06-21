@@ -1,0 +1,5 @@
+#!/bin/bash
+
+clang++ -std=c++20 -O3 -Wall -Wextra -Wpedantic -Werror -Wno-unused-variable bd2.cxx -o bd -static
+cp bd ..
+

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/codm/CoD-4-Modern-Warfare-SteamRIP.com/"Call of Duty 4 Modern Warfare"/
+WINEPREFIX=~/.wine WINEARCH=win32 wine iw3sp.exe
+
+

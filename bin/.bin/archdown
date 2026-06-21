@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ "$1" == "d" ]
+then
+  rclone sync drive66:archback ~/archback -P
+fi
+
+cp -r ~/archback/.config/fish ~/.config/
+cp -r ~/archback/.config/nvim ~/.config/
+cp -r ~/archback/.config/rclone ~/.config/
+cp -r ~/archback/.config/easyeffects ~/.config/
+
+cp -r ~/archback/.bin ~/
+cp -r ~/archback/.include ~/
+cp -r ~/archback/.lib ~/
+cp -r ~/archback/.src ~/
+
+cp -r ~/archback/.local/share/wallpapers ~/.local/share
+cp -r ~/archback/Pictures ~/
+cp -r ~/archback/wallpaper_d ~/Downloads
+#mkdir -p ~/cxu && cp ~/cxu/.ycm_extra_conf.py ~/cxu
+
+

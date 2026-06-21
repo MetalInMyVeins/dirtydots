@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cppname=$1".cxx"
+
+tput setaf 12
+printf "COMPILING $cppname and Solution.cxx...."
+if clang++ -std=c++20 -g -Wall -Wextra -Wpedantic -Werror -Wno-unused-variable -Wno-unused-private-field -Wno-unused-parameter -Wno-unused-but-set-variable $cppname Solution.cxx -o vimbin
+then
+  echo "done"
+  vn
+else
+  tput setaf 1
+  echo "FAILED"
+  tput setaf 45
+fi
+
+

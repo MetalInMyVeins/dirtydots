@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --error-limit=no --gen-suppressions=all --log-file=supp.log \
+#  $1
+valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --error-limit=no --track-origins=yes --gen-suppressions=all --log-fd=9 $1 9>supp.log
+
+

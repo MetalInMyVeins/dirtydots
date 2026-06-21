@@ -1,0 +1,240 @@
+[env]
+TERM = "alacritty"
+
+[window]
+opacity = 0.85
+padding = { x = 7, y = 2 }
+# dynamic_padding = false
+# decorations = "full"
+# startup_mode = "Windowed"
+# dynamic_title = true
+
+[scrolling]
+history = 30000
+# multiplier = 3
+
+[font]
+normal = { family = "JetBrains Mono ExtraBold", style = "ExtraBold" }
+bold = { family = "JetBrains Mono ExtraBold", style = "ExtraBold" }
+italic = { family = "JetBrains Mono ExtraBold", style = "ExtraBold Italic" }
+bold_italic = { family = "JetBrains Mono ExtraBold", style = "ExtraBold Italic" }
+size = 10.0
+
+# offset = { x = 0, y = 0 }
+# glyph_offset = { x = 0, y = 0 }
+builtin_box_drawing = true
+
+[bell]
+animation = "EaseOutExpo"
+duration = 150
+color = "#22d4b5"  # Your cyan, or "#d42638" for red
+# color = "#ffffff"
+#command = { program = "notify-send", args = ["Bell"] }
+#command = { program = "paplay", args = ["/usr/share/sounds/freedesktop/stereo/bell.oga"] }
+#command = { program = "speaker-test", args = ["-t", "sine", "-f", "100", "-l", "1"] }
+# command = { program = "timeout", args = ["0.1s", "speaker-test", "-t", "sine", "-f", "100", "-l", "1"] }
+#command = { program = "beep", args = ["-f", "800", "-l", "100"] }
+#command = { program = "ffplay", args = ["-nodisp", "-autoexit", "-t", "0.1", "-f", "lavfi", "sine=frequency=1000"] }
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+# vi_mode_style = "None"
+# blink_interval = 750
+# blink_timeout = 5
+unfocused_hollow = true
+# thickness = 0.15
+
+[terminal]
+# osc52 = "OnlyCopy"
+
+# Colors (matching your foot theme)
+# [colors.primary]
+# background = "#201f1a"
+# foreground = "#c4c8c0"
+#
+# [colors.cursor]
+# text = "#000000"
+# cursor = "#1bac96"
+#
+# [colors.normal]
+# black   = "#1a0a1a"
+# red     = "#d42638"
+# green   = "#3db870"
+# yellow  = "#b85420"
+# blue    = "#8fc165"
+# magenta = "#6a6e58"
+# cyan    = "#22d4b5"
+# white   = "#7a7870"
+#
+# [colors.bright]
+# black   = "#626262"
+# red     = "#d42638"
+# green   = "#3db870"
+# yellow  = "#b85420"
+# blue    = "#8fc165"
+# magenta = "#6a6e58"
+# cyan    = "#22d4b5"
+# white   = "#7a7870"
+#
+# [colors.dim]
+# black   = "#ff0000"  # Lighter than normal black
+# white   = "#ff0000"  # Dimmer than normal white
+
+[colors.primary]
+# background = "#1a150b"
+# foreground = "#c5c4c2"
+# background = "#1a0d00"
+# background = "#1f1000"
+background = "#150a00"
+foreground = "#9a9996"
+# foreground = "#ff0000"
+
+[colors.cursor]
+text = "#1a150b"
+# cursor = "#c5c4c2"
+cursor = "#67959a"
+
+[colors.vi_mode_cursor]
+text = "#1a150b"
+cursor = "#c5c4c2"
+
+[colors.search.matches]
+# foreground = "#1a150b"
+# background = "#c5c4c2"
+foreground = "#ff0000"
+background = "#ff0000"
+
+[colors.search.focused_match]
+foreground = "CellBackground"
+background = "CellForeground"
+
+[colors.line_indicator]
+foreground = "None"
+background = "None"
+
+[colors.footer_bar]
+# foreground = "#6f675a"
+# background = "#c5c4c2"
+foreground = "#ff0000"
+background = "#ff0000"
+
+[colors.selection]
+text = "CellBackground"
+background = "CellForeground"
+
+[colors.normal]
+# black = "#1a150b"
+# red = "#5c5c56"
+# green = "#be6835"
+# yellow = "#C7A032"
+# blue = "#E3AD5C"
+# magenta = "#ff0000"
+# cyan = "#67959a"
+# white = "#c5c4c2"
+black = "#212121"
+red = "#d70000"
+green = "#be6835"
+yellow = "#be6835"
+blue = "#be6835"
+magenta = "#008700"
+cyan = "#5e9499"
+white = "#9a9996"
+
+[colors.bright]
+# black = "#6f675a"
+# red = "#B65713"
+# green = "#728C5B"
+# yellow = "#C7A032"
+# blue = "#E3AD5C"
+# magenta = "#F2D265"
+# cyan = "#C3BB94"
+# white = "#c5c4c2"
+black = "#585858"
+red = "#d70000"
+green = "#be6835"
+yellow = "#be6835"
+blue = "#be6835"
+magenta = "#00ff00"
+cyan = "#5e9499"
+white = "#9a9996"
+
+[colors.dim]
+# black = "#c5c4c2"
+# red = "#B65713"
+# green = "#F2D265"
+# yellow = "#C7A032"
+# blue = "#E3AD5C"
+# magenta = "#728C5B"
+# cyan = "#C3BB94"
+# white = "#6f675a"
+black = "#ff0000"
+red = "#ff0000"
+green = "#ff0000"
+yellow = "#ff0000"
+blue = "#ff0000"
+magenta = "#ff0000"
+cyan = "#ff0000"
+white = "#ff0000"
+
+[mouse]
+hide_when_typing = false
+
+# Key bindings (similar to your foot config)
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "Insert"
+mods = "Shift"
+action = "PasteSelection"
+
+[[keyboard.bindings]]
+key = "Plus"
+mods = "Control"
+action = "IncreaseFontSize"
+
+[[keyboard.bindings]]
+key = "Minus"
+mods = "Control"
+action = "DecreaseFontSize"
+
+[[keyboard.bindings]]
+key = "Key0"
+mods = "Control"
+action = "ResetFontSize"
+
+[[keyboard.bindings]]
+key = "N"
+mods = "Control|Shift"
+action = "SpawnNewInstance"
+
+# Scrollback bindings
+[[keyboard.bindings]]
+key = "PageUp"
+mods = "Shift"
+action = "ScrollPageUp"
+
+[[keyboard.bindings]]
+key = "PageDown"
+mods = "Shift"
+action = "ScrollPageDown"
+
+[[keyboard.bindings]]
+key = "Home"
+mods = "Shift"
+action = "ScrollToTop"
+
+[[keyboard.bindings]]
+key = "End"
+mods = "Shift"
+action = "ScrollToBottom"

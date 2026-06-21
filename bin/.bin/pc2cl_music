@@ -1,0 +1,14 @@
+#!/bin/bash
+# Backup Music from pc to cloud
+
+tput setaf 4
+echo "This script is going to tranfer data according to the diagram below:"
+tput setaf 6
+echo "PC     ---------->     Cloud"
+tput setaf 4
+echo "Folder: Music"
+read -p "Confirmed to continue? (yes): " confirm && [[ $confirm == "yes" ]] || exit 1
+tput setaf 6
+rclone sync ~/HDD/Media/Music abdurrahim:Music -P
+
+

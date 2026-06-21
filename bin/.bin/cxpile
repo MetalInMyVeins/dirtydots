@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Check if no arguments are provided
+if [ $# -eq 0 ]; then
+  echo "Usage: cxpile <program1.cxx> <program2.cxx> ..."
+  exit 1
+fi
+
+# Loop through the provided C++ program files
+for source_file in "$@"; do
+  # Check if the source file exists
+  if [ ! -f "$source_file" ]; then
+    echo "Error: $source_file not found. Skipping."
+    continue
+  fi
+
+  # Extract the filename without the extension
+  filename=$(basename -- "$source_file")
+  filename_without_extension="${filename%.*}"
+
+  #echo -en "Compiling \e[1;34m$source_file\e[0m...."
+  echo "Compiling $source_file ...."
+  # Compile the C++ program and generate the binary with the same name
+  clang++ -g -std=c++20 "$source_file" -o "$filename_without_extension"
+
+  # Check if compilation was successful
+  if [ $? -eq 0 ]; then
+    #echo -en "DONE. Binary \e[1;32m$filename_without_extension\e[0m generated."
+    echo "DONE. Binary $filename_without_extension generated."
+    #echo -e "Compilation of \e[1;34m$source_file\e[0m successful. Binary \e[1;32m$filename_without_extension\e[0m generated."
+  else
+    echo -e "FAILED"
+  fi
+done
+

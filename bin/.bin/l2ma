@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ip=10.200.33.9
+scp -P 8022 $(cat ~/.bin/apkpath) u0_a172@$ip:/storage/emulated/0/ssh
+
+

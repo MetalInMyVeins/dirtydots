@@ -1,0 +1,5 @@
+#!/bin/bash
+
+lspci -v -s 00:02.0
+
+

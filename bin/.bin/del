@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Check if at least one argument (an exclude item) is provided
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 file_or_dir_to_keep [more_files_or_dirs_to_keep...]"
+    exit 1
+fi
+
+# Build the exclusion expression for 'find'
+EXPR=""
+for item in "$@"; do
+    EXPR="$EXPR -name \"$item\" -o"
+done
+# Trim trailing -o
+EXPR="${EXPR::-3}"
+
+# Run the find command to delete everything except the excluded items
+eval "find . -mindepth 1 -maxdepth 1 ! \( $EXPR \) -exec rm -rf {} +"

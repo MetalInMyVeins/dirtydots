@@ -1,0 +1,5 @@
+#!/bin/bash
+
+WINEPREFIX=~/.wine64 WINEARCH=win64 wine ~/HDD/Media/games_d/R.Type.Dimensions/R-Type_Dimensions/R-Type_Dimensions.exe
+
+

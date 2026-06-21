@@ -1,0 +1,34 @@
+#!/bin/bash
+# Compile 64-bit assembly programs (intel) using nasm and clang.
+
+# Loop through the input file names
+for filename in "$@"; do
+  # Check if the file exists
+  if [ -f "$filename" ]; then
+    # Extract the base name of the file without the extension
+    basename="${filename%.asm}"
+
+    # Assemble the assembly file to generate object file
+    nasm -f elf64 -o "$basename".o "$filename"
+    # Check if the assembling was successful
+    if [ $? != 0 ]; then
+      echo "Error assembling $filename"
+      continue
+    fi
+
+    # Link the object file to generate binary
+    clang -std=c17 -m64 -fuse-ld=lld "$basename".o -o "$basename"i -static
+    # Check if linking was successful
+    if [ $? == 0 ]; then
+      echo "Assembled $filename > "$basename"i"
+      # Delete the generated object file
+      rm "$basename".o
+    elif [ $? != 0 ]; then
+      echo "Error linking $basename.o"
+    fi
+  
+  else
+    echo "File $filename doesn't exist"
+  fi
+done
+

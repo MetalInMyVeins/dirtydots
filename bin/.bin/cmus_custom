@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cmus
+~/.bin/remdup ~/.config/cmus/playlists/Favorites
+

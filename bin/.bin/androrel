@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./gradlew assembleRelease
+pkill -f java
+

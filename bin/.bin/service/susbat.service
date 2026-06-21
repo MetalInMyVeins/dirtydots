@@ -1,0 +1,9 @@
+[Unit]
+Description=Low Battery Sleep Service
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/metal888/.bin/susbat
+
+

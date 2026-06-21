@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/"Need For Speed Most Wanted Black Edition"/
+WINEPREFIX=~/.wine WINEARCH=win32 wine speed.exe
+
+

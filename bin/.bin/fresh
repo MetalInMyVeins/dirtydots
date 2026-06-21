@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -d app/jni/src/ ];
+then
+  cd app/jni/src/$(basename $(pwd))
+fi
+
+rm -rf .cache bin/* build/* build/.cache doc/* driver/* examples/* include/* include/.cache lib/* src/* tests/* vendor/* *.log 2&>1 && rm 1
+
+

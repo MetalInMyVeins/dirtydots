@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#echo 0 | sudo tee /sys/bus/usb/devices/1-7/authorized
+#echo 0 | sudo tee /sys/bus/usb/devices/1-9/authorized
+#sudo ip link set enp0s31f6 down
+#sudo sysctl kernel.nmi_watchdog = 0
+
+

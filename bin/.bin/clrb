@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -d app/jni/src/ ];
+then
+  cd app/jni/src/$(basename $(pwd))
+
+fi
+
+rm -rf build/ buildwin64
+

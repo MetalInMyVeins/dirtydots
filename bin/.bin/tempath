@@ -1,0 +1,6 @@
+#!/bin/fish
+# Temporarily add current directory to PATH
+
+set -gx PATH $PATH (pwd)
+
+

@@ -1,0 +1,36 @@
+##!/bin/bash
+
+#INPUT="colors-waybar.css"
+
+# Extract valid CSS variable color lines
+#grep -E -- '--(background|foreground|cursor|color[0-9]+):' "$INPUT" \
+#| sed -E 's/--([a-zA-Z0-9]+):[[:space:]]*(#[a-fA-F0-9]+);/\1 \2/' \
+#| while read -r name hex; do
+    # Convert hex to RGB
+#    r=$((16#${hex:1:2}))
+#    g=$((16#${hex:3:2}))
+#    b=$((16#${hex:5:2}))
+    
+    # Print label and color block
+#    printf "%-12s %s\n" "$name" "$(printf '\e[48;2;%d;%d;%dm  \e[0m' $r $g $b)"
+#done
+
+#!/bin/bash
+
+INPUT="colors-waybar.css"
+
+# Print each @define-color as a colored swatch in terminal
+grep -E '^@define-color[[:space:]]+[a-zA-Z0-9_-]+[[:space:]]+#' "$INPUT" \
+| while read -r line; do
+    # Parse color name and hex value
+    name=$(echo "$line" | awk '{print $2}')
+    hex=$(echo "$line" | grep -oE '#[a-fA-F0-9]{6}')
+
+    # Convert hex to RGB
+    r=$((16#${hex:1:2}))
+    g=$((16#${hex:3:2}))
+    b=$((16#${hex:5:2}))
+
+    # Print label and swatch using ANSI 24-bit color
+    printf "%-12s %s %s\n" "$name" "$hex" "$(printf '\e[48;2;%d;%d;%dm  \e[0m' $r $g $b)"
+done

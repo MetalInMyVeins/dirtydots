@@ -1,0 +1,5 @@
+#!/bin/bash
+
+tput setaf 6
+exec Rscript $@
+

@@ -1,0 +1,94 @@
+#!/bin/bash
+
+tput setaf 12
+
+arch=
+cmakexe=
+if [ -f CMakeLists.txt ];
+then
+  cmakexe=$(cat CMakeLists.txt | grep -oP 'project\(\K[^)]+')
+  if [ ! -f bin/$cmakexe ];
+  then
+    tput setaf 1
+    echo "Project is not compiled yet!"
+    exit 1
+  else
+    arch=$(file -b bin/$cmakexe)
+  fi
+elif [ ! -f CMakeLists.txt ];
+then
+  cmakexe=$(bash ~/.bin/.exen)
+  if [[ ! -f $cmakexe && ! -f bin/$cmakexe ]];
+  then
+    tput setaf 1
+    echo "No relevant binary found!"
+    exit 1
+  fi
+fi
+
+
+exename="$cmakexe"
+winexename=$cmakexe".exe"
+
+if [ -f bin/$exename ];
+then
+  arch=$(file -b bin/$exename)
+elif [ -f $exename ];
+then
+  arch=$(file -b $exename)
+elif [ -f bin/$winexename ];
+then
+  arch=$(file -b bin/$winexename)
+elif [ -f $winexename ];
+then
+  arch=$(file -b $winexename)
+fi
+
+if [[ $arch == *"ELF 32-bit"* ]];
+then
+  tput setaf 4
+  echo "ARCHITECTURE : Linux x86"
+  echo "RUNNING...."
+  tput setaf 45
+  if [ -f bin/$exename ];
+  then
+    bin/$exename
+  elif [ -f $exename ];
+  then
+    $exename
+  fi
+elif [[ $arch == *"ELF 64-bit"* ]];
+then
+  tput setaf 4
+  echo "ARCHITECTURE : Linux x86_64"
+  echo "Running...."
+  tput setaf 45
+  if [[ -f bin/$exename && -f .rn ]];
+  then
+    $(cat .rn) bin/$exename $@
+  elif [ -f bin/$exename ];
+  then
+    bin/$exename $@
+  elif [ -f $exename ];
+  then
+    $exename
+  fi
+elif [[ $arch == *"PE32 executable"* ]];
+then
+  echo "ARCHITECTURE : Windows 32-bit"
+  echo "Running...."
+  tput setaf 45
+  WINEARCH=win32 WINEPREFIX=~/.wine WINEDEBUG=-all wine bin/$winexename
+elif [[ $arch == *"PE32+ executable"* ]];
+then
+  echo "ARCHITECTURE : Windows 64-bit"
+  echo "Running...."
+  tput setaf 45
+  WINEARCH=win64 WINEPREFIX=~/.wine64 WINEDEBUG=-all wine bin/$winexename
+else
+  tput setaf 1
+  echo "Unrecognized architecture!"
+fi
+#printf "\n"
+
+

@@ -1,0 +1,6 @@
+# Loop through all arguments and print them
+echo "Arguments provided:"
+for arg in "$@"; do
+  echo "$arg"
+done
+

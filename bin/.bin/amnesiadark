@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/HDD/Media/games_d/amnesia/Amnesia.The.Dark.Descent.v1.41b/Amnesia.The.Dark.Descent.v1.41b/
+WINEPREFIX=~/.wine WINEARCH=win32 wine Amnesia.exe
+
+

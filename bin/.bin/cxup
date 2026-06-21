@@ -1,0 +1,10 @@
+#!/bin/bash
+
+7z a -tzip -mx=0 ~/cxu.zip ~/devel/cxu
+
+if [ "$1" == "u" ]
+then
+  rclone sync ~/cxu.zip hossain66: -P
+fi
+
+

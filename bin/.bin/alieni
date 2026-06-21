@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/Media/games_d/ai/"Alien Isolation"/
+WINEPREFIX=~/.wine WINEARCH=win32 wine AI.exe
+
+

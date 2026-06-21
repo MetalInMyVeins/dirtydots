@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#WINEPREFIX=~/.wine WINEARCH=win32 wine /home/metal888/HDD/Media/games_d/"Outlast + Whistleblower"/"Outlast Whistleblower"/OutlastLauncher.exe
+cd /home/metal888/Games/"Outlast Whistleblower"/
+WINEPREFIX=~/.wine wine OutlastLauncher.exe
+#proton OutlastLauncher.exe
+
+

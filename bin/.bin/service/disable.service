@@ -1,0 +1,13 @@
+[Unit]
+Description=Custom script start/stop
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/metal888/.bin/disable
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+binary=$1
+qemu-aarch64 -g 1234 ./$binary
+aarch64-linux-gnu-gdb ./$binary
+
+

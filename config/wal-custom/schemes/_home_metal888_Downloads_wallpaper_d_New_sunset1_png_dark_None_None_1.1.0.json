@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/metal888/Downloads/wallpaper_d/New/sunset1.png",
+    "alpha": "100",
+    "special": {
+        "background": "#060302",
+        "foreground": "#e7cea5",
+        "cursor": "#e7cea5"
+    },
+    "colors": {
+        "color0": "#060302",
+        "color1": "#9B540E",
+        "color2": "#B2460A",
+        "color3": "#CA5109",
+        "color4": "#F36903",
+        "color5": "#89755B",
+        "color6": "#FC900D",
+        "color7": "#e7cea5",
+        "color8": "#a19073",
+        "color9": "#9B540E",
+        "color10": "#B2460A",
+        "color11": "#CA5109",
+        "color12": "#F36903",
+        "color13": "#89755B",
+        "color14": "#FC900D",
+        "color15": "#e7cea5"
+    }
+}

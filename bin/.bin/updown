@@ -1,0 +1,9 @@
+#!/bin/bash
+
+down=$(cat /sys/class/net/wlp4s0/statistics/rx_bytes)
+up=$(cat /sys/class/net/wlp4s0/statistics/tx_bytes)
+div=$((1024*1024))
+declare -i rd=$down/$div ru=$up/$div
+echo "Total download size: $rd MiB"
+echo "Total upload size: $ru MiB"
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+filename=$1
+filename_wo_ext=${filename%.*}
+compiler="clang++ -std=c++20"
+
+${compiler} -c -fPIC $filename
+${compiler} ${filename_wo_ext}".o" -o "lib"${filename_wo_ext}".so" -shared -static-libgcc -static-libstdc++
+rm ${filename_wo_ext}".o"
+
+

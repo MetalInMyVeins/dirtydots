@@ -1,0 +1,21 @@
+lscpu: Displays information about the CPU(s) in your system, such as architecture, model, clock speed, cache size, and number of cores/threads.
+
+lsblk: Lists all block devices (hard drives, SSDs, USB drives, etc.) available on the system, including their type, size, mount point, and other relevant details.
+
+lsmod: Lists all currently loaded kernel modules, which are small pieces of code that extend the functionality of the kernel.
+
+lsusb: Displays information about USB devices connected to the system, such as vendor and product IDs, serial numbers, and device class.
+
+lshw: Provides a detailed hardware inventory of your system, including information about the CPU, memory, motherboard, graphics card, and other components.
+
+lsmem: Displays information about the system's memory, such as total memory, used memory, and available memory.
+
+lspci: Lists all PCI devices (such as network cards, sound cards, and graphics cards) installed in the system.
+
+lsusb: Displays information about USB devices connected to the system, such as vendor and product IDs, serial numbers, and device class.
+
+lsof: Lists all open files and the processes that are using them.
+
+lsattr: Displays or changes the extended attributes of files and directories.
+
+

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd
+7z a cxu.zip devel/cxu -mx0 -xr!devel/cxu/sources/
+
+if [ "$1" == "u" ]
+then
+  rclone sync ~/cxu.zip drive66: -P
+  rm ~/cxu.zip
+fi
+
+
