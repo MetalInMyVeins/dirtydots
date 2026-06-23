@@ -99,7 +99,8 @@ function fish_prompt
 
     echo -n '──('
     #set_color -o "008000"
-    set_color -o "af5f00"
+    # set_color -o "af5f00"
+		set_color -o green
     #echo -n :(prompt_pwd)
     echo -n (my_pwd)
     set_color -o green
