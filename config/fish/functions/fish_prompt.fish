@@ -121,7 +121,8 @@ function fish_prompt
         echo -n "branch:"
         #set_color -o normal
         #echo -n ":"
-        set_color -o af5f00
+        # set_color -o af5f00
+        set_color -o green
         echo -n $git_branch
         set_color -o green
         echo -n ")"
