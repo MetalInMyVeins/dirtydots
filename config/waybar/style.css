@@ -48,7 +48,7 @@ button:hover {
 }
 #workspaces button.active {
     color: rgba(53, 132, 228, 1);
-    color: @colorx4;
+    color: @colorx7;
 }
 #workspaces button.urgent {
     background-color: #eb4d4b;
