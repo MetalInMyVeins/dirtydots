@@ -259,7 +259,8 @@ osc52 = "OnlyCopy"
 # NEW SETUP
 [colors.primary]
 background = "#150a00"
-foreground = "#9a9996"
+foreground = "#6e8b5a"
+# foreground = "#9a9996"
 
 [colors.cursor]
 text = "#180A09"
