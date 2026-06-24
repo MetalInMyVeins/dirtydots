@@ -11,6 +11,10 @@ rsync -av --delete ~/.config/fish ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/hypr ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/ly ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/neofetch ~/Backup/dirtydots/config
+
+mkdir -p ~/Backup/dirtydots/config/nvim
+rsync -av --delete ~/.config/nvim/init.lua ~/Backup/dirtydots/config/nvim/init.lua
+
 rsync -av --delete ~/.config/rofi ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/swaylock ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/wal ~/Backup/dirtydots/config
