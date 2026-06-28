@@ -2,7 +2,8 @@
 TERM = "alacritty"
 
 [window]
-opacity = 0.85
+# opacity = 0.85
+opacity = 0.75
 padding = { x = 7, y = 2 }
 # dynamic_padding = false
 # decorations = "full"

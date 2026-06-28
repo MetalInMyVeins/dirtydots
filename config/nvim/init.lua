@@ -2616,7 +2616,8 @@ hi Vert4 guibg=none guifg=#5e87ff gui=bold cterm=bold
 hi Vert5 guibg=NONE guifg=#008000 gui=bold cterm=bold
 
 hi Normal cterm=bold gui=bold guibg=none guifg=#a0a0a0
-hi Comment cterm=none guifg=Grey30
+" hi Comment cterm=none guifg=Grey30
+hi Comment cterm=none guifg=Grey35
 hi Function cterm=bold guifg=Green4
 hi EndOfBuffer cterm=bold guifg=#000000  " tildes (~)
 
