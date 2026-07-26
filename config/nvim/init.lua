@@ -2667,6 +2667,10 @@ hi Vert2 guibg=NONE guifg=#2f885c gui=bold cterm=bold
 hi Vert3 guibg=NONE guifg=#d70056
 hi Vert4 guibg=none guifg=#5e87ff gui=bold cterm=bold
 hi Vert5 guibg=NONE guifg=#008000 gui=bold cterm=bold
+hi NewSep guibg=NONE guifg=#a3582d gui=bold cterm=bold
+hi NewBlue guibg=NONE guifg=#5e9499 gui=bold cterm=bold
+
+
 
 hi Normal cterm=bold gui=bold guibg=none guifg=#a0a0a0
 " hi Comment cterm=none guifg=Grey30
@@ -2693,8 +2697,6 @@ hi String cterm=bold guifg=SandyBrown
 
 " hi link WinSeparator Vert2
 " hi link VertSplit Vert2
-
-hi NewSep guibg=NONE guifg=#a3582d gui=bold cterm=bold
 
 hi link WinSeparator NewSep
 hi link VertSplit NewSep
@@ -2748,7 +2750,8 @@ hi link NERDTreeOpenable Custom2
 hi link NERDTreeClosable Function
 hi NERDTreeFile cterm=bold guifg=#a8775f
 "hi link NERDTreeFile Custom1
-hi FloatermBorder guibg=NONE guifg=#3584e4 gui=bold
+" hi FloatermBorder guibg=NONE guifg=#3584e4 gui=bold
+hi link FloatermBorder NewBlue
 
 
 hi link YcmInlayHint Comment
