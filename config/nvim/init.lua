@@ -1612,31 +1612,32 @@ local Vert1 = '#5e87ff'
 --local Vert2 = '#d7875f'
 --local Vert2 = '#d6453c'
 local Vert2 = '#2f885c'
+local NewSep = '#a3582d'
 -- Change the background of lualine_c section for normal mode
-custom_gruvbox.normal.a.bg = Vert2
+custom_gruvbox.normal.a.bg = NewSep
 custom_gruvbox.normal.b.bg = '#303030'
 --custom_gruvbox.normal.c.bg = '#303030'
 custom_gruvbox.normal.c.bg = '#1c1c1c'
 
 --custom_gruvbox.normal.a.fg = '#5e87ff'
-custom_gruvbox.normal.b.fg = Vert2
-custom_gruvbox.normal.c.fg = Vert2
+custom_gruvbox.normal.b.fg = NewSep
+custom_gruvbox.normal.c.fg = NewSep
 
-custom_gruvbox.insert.a.bg = Vert1
+custom_gruvbox.insert.a.bg = Vert2
 custom_gruvbox.insert.b.bg = '#303030'
 custom_gruvbox.insert.c.bg = '#1c1c1c'
 
 custom_gruvbox.insert.a.fg = '#1c1c1c'
-custom_gruvbox.insert.b.fg = Vert2
-custom_gruvbox.insert.c.fg = Vert2
+custom_gruvbox.insert.b.fg = NewSep
+custom_gruvbox.insert.c.fg = NewSep
 
 custom_gruvbox.visual.a.bg = '#008000'
-custom_gruvbox.visual.b.bg = Vert2
+custom_gruvbox.visual.b.bg = NewSep
 custom_gruvbox.visual.c.bg = '#1c1c1c'
 
 custom_gruvbox.visual.a.fg = '#1c1c1c'
 custom_gruvbox.visual.b.fg = '#1c1c1c'
-custom_gruvbox.visual.c.fg = Vert2
+custom_gruvbox.visual.c.fg = NewSep
 
 --custom_gruvbox.inactive.a.bg = ''
 --custom_gruvbox.inactive.b.bg = ''
@@ -2357,6 +2358,19 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
 })
 
 
+vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
+  pattern = { "*.json" },
+  callback = function()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.softtabstop = 4
+    vim.opt_local.expandtab = false
+    vim.opt_local.autoindent = true
+    vim.opt_local.smartindent = false
+  end,
+})
+
+
 
 
 -- ===========================
@@ -2676,17 +2690,23 @@ hi String cterm=bold guifg=SandyBrown
 "hi VertSplit cterm=bold guifg=#ff0000 guibg=#ff0000
 "hi VertSplit guifg=#ff0000 guibg=NONE
 "highlight VertSplit guifg=#ff0000 gui=bold
-hi link WinSeparator Vert2
-hi link VertSplit Vert2
+
+" hi link WinSeparator Vert2
+" hi link VertSplit Vert2
+
+hi NewSep guibg=NONE guifg=#a3582d gui=bold cterm=bold
+
+hi link WinSeparator NewSep
+hi link VertSplit NewSep
 
 
 " Highlight settings for different modes
 augroup ModeChangeHighlight
   autocmd!
   " Normal mode settings
-  autocmd InsertLeave,ModeChanged *:[^vV\x16]* hi! link WinSeparator Vert2
+  autocmd InsertLeave,ModeChanged *:[^vV\x16]* hi! link WinSeparator NewSep
   " Insert mode settings
-  autocmd InsertEnter,ModeChanged *:i* hi! link WinSeparator Vert1
+  autocmd InsertEnter,ModeChanged *:i* hi! link WinSeparator Vert2
   " Visual mode settings
   autocmd ModeChanged *:[vV\x16]* hi! link WinSeparator Vert5
   " Replace mode settings
