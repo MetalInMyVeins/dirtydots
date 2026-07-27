@@ -2718,7 +2718,8 @@ augroup END
 
 hi Identifier cterm=bold guifg=DarkSeaGreen4
 hi Boolean cterm=bold guifg=Purple3
-hi Number cterm=bold guifg=DarkMagenta
+" hi Number cterm=bold guifg=DarkMagenta
+hi Number cterm=bold guifg=Magenta3
 hi Operator cterm=bold guifg=SteelBlue1
 hi Statement cterm=bold guifg=DeepSkyBlue4
 hi Label cterm=bold guifg=DeepSkyBlue4
