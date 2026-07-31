@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#WINEPREFIX=~/.wine WINEARCH=win32 wine /home/metal888/HDD/Media/games_d/"Outlast + Whistleblower"/"Outlast Whistleblower"/OutlastLauncher.exe
+#cd /home/metal888/Games/"Outlast Whistleblower"/
+#WINEPREFIX=~/.wine wine OutlastLauncher.exe
+#proton OutlastLauncher.exe
+
+cd /home/metal888/devel/OpenSource/Games/Outlast2/Binaries/Win64/
+STEAM_COMPAT_DATA_PATH="$HOME/.steam/root/compatibilitytools.d/GE-Proton11-3/prefix" STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/root" "$HOME/.steam/root/compatibilitytools.d/GE-Proton11-3/proton" run "Outlast2.exe"
