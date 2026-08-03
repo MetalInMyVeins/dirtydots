@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd ~/Media/Games/"Age of Empires II Definitive Edition"/
+# STEAM_COMPAT_DATA_PATH="$HOME/.steam/root/compatibilitytools.d/GE-Proton11-3/prefix" \
+# STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/root" \
+# "$HOME/.steam/root/compatibilitytools.d/GE-Proton11-3/proton" run "AoE2DE_s.exe"
+
+WINEPREFIX=~/.wine wine AoE2DE_s.exe
