@@ -1,7 +1,4 @@
 #!/bin/bash
 
-#cd ~/Media/games_d/factorio/Factorio-1.1.101/bin/x64/
-cd ~/Games/Factorio-2.0.55/bin/x64/
-WINEPREFIX=~/.wine wine factorio.exe
-#proton factorio.exe
-
+cd ~/Media/Games/Factorio-2.0.69/
+./start.sh
