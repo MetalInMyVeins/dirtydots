@@ -166,7 +166,7 @@ hl.animation({
     enabled = true,
     speed = 3.8,
     bezier = "default",
-    style = "popin 80%",
+    style = "popin 50%",
 })
 hl.animation({
     leaf = "border",
