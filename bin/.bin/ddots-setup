@@ -24,3 +24,7 @@ rsync -av --delete ~/.config/waypaper ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/wlogout ~/Backup/dirtydots/config
 
 rsync -av --delete ~/Wallpapers ~/Backup/dirtydots
+
+mkdir -p ~/Backup/dirtydots/gamesaves/
+mkdir -p ~/Backup/dirtydots/gamesaves/factorio/
+rsync -av --delete ~/Media/Games/Factorio-2.0.69/game/saves/fact2.zip ~/Backup/dirtydots/gamesaves/factorio/
