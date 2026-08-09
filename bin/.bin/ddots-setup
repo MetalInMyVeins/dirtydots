@@ -9,6 +9,7 @@ rsync -av --delete ~/.config/alacritty ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/cmus ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/easyeffects ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/fish ~/Backup/dirtydots/config
+rsync -av --delete ~/.config/foot ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/hypr ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/ly ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/neofetch ~/Backup/dirtydots/config
