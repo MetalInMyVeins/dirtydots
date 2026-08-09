@@ -34,6 +34,13 @@ hl.bind(mainMod .. " + N", hl.dsp.focus({ workspace = "empty" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 
+
+-- hl.bind("SUPER+SHIFT + right", hl.dsp.exec_cmd("resizeactive 40 0"))
+-- hl.bind("SUPER+SHIFT + left", hl.dsp.exec_cmd("resizeactive -40 0"))
+-- hl.bind("SUPER+SHIFT + up", hl.dsp.exec_cmd("resizeactive 0 -40"))
+-- hl.bind("SUPER+SHIFT + down", hl.dsp.exec_cmd("resizeactive 0 40"))
+
+
 -- PrtSc: Capture whole screen
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output -m eDP-1 -o ~/Pictures"))
 -- Super + Shift + PrtSc: HD capture of whole screen
