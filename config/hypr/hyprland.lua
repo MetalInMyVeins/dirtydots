@@ -11,7 +11,8 @@ hl.monitor({
 })
 
 local mainMod = "SUPER"
-local terminal = "alacritty"
+-- local terminal = "alacritty"
+local terminal = "foot"
 local filemanager = "dolphin"
 local browser = "brave"
 local pdfreader = "okular"
