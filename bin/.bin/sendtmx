@@ -1,0 +1,4 @@
+#!/bin/bash
+# send arbitrary command in tmux session
+
+tmux send-keys -t dev "$*" Enter
