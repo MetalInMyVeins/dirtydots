@@ -2385,7 +2385,6 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
 
 
 
-
 -- ===========================
 -- Syntax and Environment
 -- ===========================
@@ -2658,6 +2657,8 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 
+
+vim.keymap.set("n", "<M-l>", ":!sendtmx ", { desc = "Send arbitrary commands to tmux session named dev" })
 
 
 
