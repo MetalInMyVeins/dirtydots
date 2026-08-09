@@ -2660,6 +2660,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.keymap.set("n", "<M-l>", ":!sendtmx ", { desc = "Send arbitrary commands to tmux session named dev" })
 
+vim.keymap.set("n", "<M-f>", ":!sendtmx bash tmux_script.sh ", { desc = "Send custom script to tmux session and execute" })
+
 
 
 -- ===========================

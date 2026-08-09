@@ -3,3 +3,4 @@ nvim: Alt-L = write sendtmx in command mode and wait for command string to be se
 tmux: Alt-; = enter copy mode in tmux, refer to .tmux.conf
 tmux: jk does vim-like scrolling, refer to .tmux.conf
 terminal: default terminal changed to foot from alacritty (experimental)
+tmux: Alt+F = Send tmux_script.sh custom script to tmux session and execute
