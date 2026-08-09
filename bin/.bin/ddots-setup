@@ -4,6 +4,7 @@
 rsync -av --delete ~/.bin ~/Backup/dirtydots/bin
 
 mkdir -p ~/Backup/dirtydots/config
+rsync -av --delete ~/.tmux.conf ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/alacritty ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/cmus ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/easyeffects ~/Backup/dirtydots/config
