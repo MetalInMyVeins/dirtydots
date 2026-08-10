@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# hypr-stash.sh — global hidden window stack for Hyprland (Lua-config / 0.55+)
+#
+# push : send active window to the hidden stack (top of stack)
+# pop  : bring the most recently stashed window back and focus it
+#
+# Hyprland 0.55+ with a Lua config runs hyprctl in "Lua root" mode. There is
+# no longer a separate movetoworkspacesilent — the silent (non-follow)
+# behavior is `hl.dsp.window.move({ workspace = ..., window = ..., follow = false })`.
+# Focusing a window by address is `hl.dsp.focus({ window = "address:..." })`.
+# The string passed to `hyprctl dispatch` is evaluated as `hl.dispatch(<string>)`,
+# so it must itself be a dispatcher constructor call (hl.dsp.*), not already
+# wrapped in hl.dispatch(...).
+#
+# Usage:
+#   hypr-stash.sh push
+#   hypr-stash.sh pop
+
+set -euo pipefail
+
+STATE_DIR="${XDG_RUNTIME_DIR:-/tmp}/hypr-stash"
+STACK_FILE="$STATE_DIR/stack"
+SPECIAL_WS="special:stash"
+
+mkdir -p "$STATE_DIR"
+touch "$STACK_FILE"
+
+push() {
+    local addr
+    addr=$(hyprctl activewindow -j | jq -r '.address')
+
+    if [[ -z "$addr" || "$addr" == "null" ]]; then
+        notify-send "hypr-stash" "No active window to stash" 2>/dev/null || true
+        exit 0
+    fi
+
+    hyprctl dispatch "hl.dsp.window.move({ workspace = \"${SPECIAL_WS}\", window = \"address:${addr}\", follow = false })"
+
+    { echo "$addr"; cat "$STACK_FILE"; } > "$STACK_FILE.tmp"
+    mv "$STACK_FILE.tmp" "$STACK_FILE"
+}
+
+pop() {
+    if [[ ! -s "$STACK_FILE" ]]; then
+        notify-send "hypr-stash" "Stack is empty" 2>/dev/null || true
+        exit 0
+    fi
+
+    local addr
+    addr=$(head -n1 "$STACK_FILE")
+
+    tail -n +2 "$STACK_FILE" > "$STACK_FILE.tmp"
+    mv "$STACK_FILE.tmp" "$STACK_FILE"
+
+    if ! hyprctl clients -j | jq -e --arg a "$addr" '.[] | select(.address == $a)' >/dev/null; then
+        if [[ -s "$STACK_FILE" ]]; then
+            pop
+        else
+            notify-send "hypr-stash" "No valid windows left in stack" 2>/dev/null || true
+        fi
+        exit 0
+    fi
+
+    local curws
+    curws=$(hyprctl activeworkspace -j | jq -r '.id')
+
+    hyprctl dispatch "hl.dsp.window.move({ workspace = ${curws}, window = \"address:${addr}\", follow = false })"
+    hyprctl dispatch "hl.dsp.focus({ window = \"address:${addr}\" })"
+}
+
+case "${1:-}" in
+    push) push ;;
+    pop) pop ;;
+    *)
+        echo "Usage: $0 {push|pop}" >&2
+        exit 1
+        ;;
+esac

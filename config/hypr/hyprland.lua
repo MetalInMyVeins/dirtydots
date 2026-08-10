@@ -112,6 +112,10 @@ hl.bind("SUPER + ALT + left", hl.dsp.window.resize({ x = -50, y = 0, relative = 
 hl.bind("SUPER + ALT + up", hl.dsp.window.resize({ x = 0, y = -50, relative = true }))
 hl.bind("SUPER + ALT + down", hl.dsp.window.resize({ x = 0, y = 50, relative = true }))
 
+-- Minimize/Retrieve active window on/from global stack
+hl.bind("SUPER + H", hl.dsp.exec_cmd("hypr-stack push"))
+hl.bind("SUPER+SHIFT + H", hl.dsp.exec_cmd("hypr-stack pop"))
+
 -- TODO: manual review — malformed env on line 93: HYPRLAND_NO_SD_NOTIFY=1
 -- TODO: manual review — malformed env on line 94: HYPRLAND_NO_SD_VARS=1
 
