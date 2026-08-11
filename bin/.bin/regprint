@@ -1,0 +1,3 @@
+#!/bin/bash
+
+glow -w 120 ~/.bin/regs_x64.md
