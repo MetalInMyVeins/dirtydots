@@ -4,8 +4,9 @@
 rsync -av --delete ~/.bin ~/Backup/dirtydots/bin
 
 mkdir -p ~/Backup/dirtydots/config
-rsync -av --delete ~/.tmux.conf ~/Backup/dirtydots/config
 rsync -av --delete ~/.gdbinit ~/Backup/dirtydots/config
+rsync -av --delete ~/.tmux.conf ~/Backup/dirtydots/config
+
 rsync -av --delete ~/.config/alacritty ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/cmus ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/easyeffects ~/Backup/dirtydots/config
@@ -25,6 +26,7 @@ rsync -av --delete ~/.config/wal-custom ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/waybar ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/waypaper ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/wlogout ~/Backup/dirtydots/config
+rsync -av --delete ~/.config/zellij ~/Backup/dirtydots/config
 
 rsync -av --delete ~/Wallpapers ~/Backup/dirtydots
 
