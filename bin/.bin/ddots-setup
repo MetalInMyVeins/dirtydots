@@ -29,6 +29,9 @@ rsync -av --delete ~/.config/wlogout ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/zellij ~/Backup/dirtydots/config
 
 rsync -av --delete ~/Wallpapers ~/Backup/dirtydots
+zip -r ~/websites.zip ~/websites
+rsync -av --delete ~/websites.zip ~/Backup/dirtydots/
+rm ~/websites.zip
 
 mkdir -p ~/Backup/dirtydots/gamesaves/
 mkdir -p ~/Backup/dirtydots/gamesaves/factorio/
