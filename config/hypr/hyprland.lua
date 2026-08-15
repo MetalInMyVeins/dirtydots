@@ -232,7 +232,8 @@ hl.config({
         --col.active_border = rgba(3584e4aa) #rgba(53, 132, 228, 0.4)
         -- LAST ONE IS CURRENT
         col = {
-            active_border = { colors = { "rgba(a3582dff)", "rgba(a3582dff)" }, angle = 45 }, -- same shade as the previous one but a bit darker
+            -- active_border = { colors = { "rgba(a3582dff)", "rgba(a3582dff)" }, angle = 45 }, -- same shade as the previous one but a bit darker
+            active_border = { colors = { "rgba(96522aff)", "rgba(96522aff)" }, angle = 45 }, -- same shade as the previous one but a bit darker
         },
         layout = "dwindle",
         --goldenhour
