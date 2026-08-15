@@ -8,3 +8,10 @@
 @define-color colorx6 #4f7a87; /** cyan dark **/
 @define-color colorx7 #b3683e; /** orange light **/
 @define-color colorx3 #4f7a87; /** cyan dark **/
+@define-color colorx4 #96522a; /** orange light **/
+
+/* color values similar to #be6835 */
+/* #B26132	~6% darker	Very subtle */
+/* #AA5D2F	~10% darker	Best choice */
+/* #A2592D	~15% darker	Clearly darker */
+/* #96522A	~20% darker	Quite dark */
