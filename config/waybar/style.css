@@ -38,7 +38,7 @@ button:hover {
     padding: 0 3px;
     background-color: rgba(0, 0, 0, 0);
     color: rgba(53, 132, 228, 0.4);
-    color: @colorx6;
+    color: @colorx3;
     font-weight: bolder;
     border-radius: 10px;
 }
