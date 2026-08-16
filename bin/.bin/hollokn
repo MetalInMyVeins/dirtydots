@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/Media/Games/"Hollow Knight"/
+wine "Hollow Knight.exe"
