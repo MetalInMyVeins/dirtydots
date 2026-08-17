@@ -343,7 +343,7 @@ hl.config({
 hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --all")
     hl.exec_cmd("awww-daemon -f xrgb &")
-    hl.exec_cmd("awww img ~/Wallpapers/brownroom1.png")
+    hl.exec_cmd("awww img ~/Wallpapers/silksong_farfields5.png")
     hl.exec_cmd("waybar -c $HOME/.config/waybar/config.jsonc -s $HOME/.config/waybar/style.css &")
     hl.exec_cmd("flatpak run com.github.wwmm.easyeffects --gapplication-service &")
     hl.exec_cmd("swaync")
