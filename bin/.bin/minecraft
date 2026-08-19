@@ -1,6 +1,3 @@
 #!/bin/bash
 
-#java -jar /home/metal888/Downloads/games_d/minecraft/TLauncher-2.895/TLauncher-2.895.jar
-java -jar ~/.bin/TLauncher-2.899/TLauncher-2.899.jar
-
-
+java -jar ~/Backup/dirtydots/gamesaves/Minecraft/TLauncher.jar
