@@ -1167,7 +1167,7 @@ require("markview.extras.headings").setup();
 
 vim.lsp.config('asm-lsp', {
   cmd = { "asm-lsp" },
-  filetypes = { "asm", "nasm", "s", "S" },
+  filetypes = { "asm", "nasm" },
   root_markers = { ".git", ".clangd", ".envrc" },
 })
 vim.lsp.enable('asm-lsp')
