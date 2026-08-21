@@ -1,0 +1,3 @@
+#!/bin/bash
+
+glow -w 120 ~/.bin/syscallsx64.md | less
