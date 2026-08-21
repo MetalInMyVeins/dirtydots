@@ -1171,6 +1171,21 @@ vim.lsp.config('asm-lsp', {
   root_markers = { ".git", ".clangd", ".envrc" },
 })
 vim.lsp.enable('asm-lsp')
+-- example .asm-lsp.toml file
+-- [default_config]
+-- version = "0.10.1"
+-- assembler = "nasm"
+-- instruction_set = "x86-64"
+--
+-- [default_config.opts]
+-- compiler = "/usr/bin/nasm"
+-- compile_flags_txt = [
+--     "-f",
+--     "elf64"
+-- ]
+-- diagnostics = true
+-- default_diagnostics = false
+
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 vim.lsp.enable('clangd')
