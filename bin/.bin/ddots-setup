@@ -8,7 +8,9 @@ rsync -av --delete ~/.gdbinit ~/Backup/dirtydots/config
 rsync -av --delete ~/.tmux.conf ~/Backup/dirtydots/config
 
 rsync -av --delete ~/.config/alacritty ~/Backup/dirtydots/config
-rsync -av --delete ~/.config/cmus ~/Backup/dirtydots/config
+# mkdir -p ~/Backup/dirtydots/config/cmus
+# rsync -av --delete ~/.config/cmus/autosave ~/Backup/dirtydots/config/cmus
+# rsync -av --delete ~/.config/cmus/metal.theme ~/Backup/dirtydots/config/cmus
 rsync -av --delete ~/.config/easyeffects ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/fish ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/foot ~/Backup/dirtydots/config
