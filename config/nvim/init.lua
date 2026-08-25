@@ -1103,10 +1103,10 @@ vim.keymap.set('n', '<leader>f', [[:GitGutterToggle<CR>]])
 
 
 -- treesitter --------------------
-require'nvim-treesitter'.install { "c", "cpp", "make", "cmake", "asm", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "toml", "yaml", "r", "java", "kotlin", "csv", "json", "css", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "hyprlang", "latex", "gitignore" }
+require'nvim-treesitter'.install { "c", "cpp", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "r", "java", "kotlin", "csv", "json", "css", "cmake", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "toml", "hyprlang", "latex", "gitignore", "asm" }
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "c", "cpp", "make", "cmake", "asm", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst","toml", "yaml", "r", "java", "kotlin", "csv", "json", "css", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "hyprlang", "latex", "gitignore" },
+  pattern = { "c", "cpp", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "r", "java", "kotlin", "csv", "json", "css", "cmake", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "toml", "hyprlang", "latex", "gitignore", "asm" },
   callback = function() vim.treesitter.start() end,
 })
 
@@ -2305,7 +2305,7 @@ endfunction
 -- Autocmds
 -- ===========================
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
-  pattern = { "*.c", "*.h", "*.cxx", "*.cpp", "*.hxx" },
+  pattern = { "*.c", "*.h" },
   callback = function()
     vim.opt_local.tabstop = 4
     vim.opt_local.shiftwidth = 4
@@ -2402,18 +2402,6 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
     vim.opt_local.shiftwidth = 4
     vim.opt_local.softtabstop = 4
     vim.opt_local.expandtab = false
-    vim.opt_local.autoindent = true
-    vim.opt_local.smartindent = false
-  end,
-})
-
-vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
-  pattern = { ".clangd" },
-  callback = function()
-    vim.opt_local.tabstop = 4
-    vim.opt_local.shiftwidth = 4
-    vim.opt_local.softtabstop = 4
-    vim.opt_local.expandtab = true
     vim.opt_local.autoindent = true
     vim.opt_local.smartindent = false
   end,
