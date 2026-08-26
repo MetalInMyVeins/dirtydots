@@ -1187,17 +1187,48 @@ vim.lsp.enable('asm-lsp')
 -- default_diagnostics = false
 
 
+local function clangd_cmd()
+    local root = vim.fn.getcwd()
+    local file = root .. "/.clangd-db"
+
+    local f = io.open(file, "r")
+    if not f then
+		return {
+			"clangd",
+			"--clang-tidy",
+			"--header-insertion=iwyu",
+			"--completion-style=detailed",
+			"--all-scopes-completion",
+		}
+    end
+
+    local dir = f:read("*l")
+    f:close()
+
+    if not dir or dir == "" then
+		return {
+			"clangd",
+			"--clang-tidy",
+			"--header-insertion=iwyu",
+			"--completion-style=detailed",
+			"--all-scopes-completion",
+		}
+    end
+
+    return {
+        "clangd",
+		"--clang-tidy",
+		"--header-insertion=iwyu",
+		"--completion-style=detailed",
+		"--all-scopes-completion",
+        "--compile-commands-dir=" .. root .. "/" .. dir,
+    }
+end
+
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 vim.lsp.enable('clangd')
 vim.lsp.config('clangd', {
-  cmd = {
-    "clangd",
-    "--clang-tidy",
-    "--header-insertion=iwyu",
-    "--completion-style=detailed",
-    "--all-scopes-completion"
-    -- "--include-ineligible-results"
-  },
+  cmd = clangd_cmd(),
   capabilities = capabilities,
 })
 
@@ -2305,7 +2336,7 @@ endfunction
 -- Autocmds
 -- ===========================
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
-  pattern = { "*.c", "*.h" },
+  pattern = { "*.c", "*.h", "*.cxx", "*.cpp", "*.hxx" },
   callback = function()
     vim.opt_local.tabstop = 4
     vim.opt_local.shiftwidth = 4
@@ -2402,6 +2433,19 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
     vim.opt_local.shiftwidth = 4
     vim.opt_local.softtabstop = 4
     vim.opt_local.expandtab = false
+    vim.opt_local.autoindent = true
+    vim.opt_local.smartindent = false
+  end,
+})
+
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
+  pattern = { ".clangd" },
+  callback = function()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.softtabstop = 4
+    vim.opt_local.expandtab = true
     vim.opt_local.autoindent = true
     vim.opt_local.smartindent = false
   end,
