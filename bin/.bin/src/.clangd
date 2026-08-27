@@ -1,0 +1,6 @@
+Diagnostics:
+    Suppress:
+        - unused-includes
+
+Completion:
+    HeaderInsertion: IWYU
