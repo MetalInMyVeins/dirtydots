@@ -1103,10 +1103,10 @@ vim.keymap.set('n', '<leader>f', [[:GitGutterToggle<CR>]])
 
 
 -- treesitter --------------------
-require'nvim-treesitter'.install { "c", "cpp", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "r", "java", "kotlin", "csv", "json", "css", "cmake", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "toml", "hyprlang", "latex", "gitignore", "asm" }
+require'nvim-treesitter'.install { "asm", "c", "cpp", "make", "cmake", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "toml", "r", "java", "kotlin", "csv", "json", "css", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "hyprlang", "latex", "gitignore", "go", "d", "swift", "zig", "c_sharp" }
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "c", "cpp", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "r", "java", "kotlin", "csv", "json", "css", "cmake", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "toml", "hyprlang", "latex", "gitignore", "asm" },
+  pattern = { "asm", "c", "cpp", "make", "cmake", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "toml", "r", "java", "kotlin", "csv", "json", "css", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "hyprlang", "latex", "gitignore", "go", "d", "swift", "zig", "c_sharp" },
   callback = function() vim.treesitter.start() end,
 })
 
@@ -2362,7 +2362,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
 
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
-  pattern = { "Makefile" },
+  pattern = { "Makefile", "*.mk" },
   callback = function()
     vim.opt_local.tabstop = 8
     vim.opt_local.shiftwidth = 8
