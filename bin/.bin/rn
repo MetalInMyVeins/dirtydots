@@ -1,117 +1,65 @@
-#!/bin/bash
-# Do `rn win` to run windows binary.
+#!/usr/bin/env bash
+#
+# rn - resolve and run a binary, either from a path argument
+#      or from the first line of a file.
+#
+# Usage:
+#   rn -f <file>   Read the first line of <file>, treat it as a path
+#                  to a binary, and execute it.
+#   rn -p <path>   Treat <path> as a literal binary path and execute it.
 
-tput setaf 12
+set -euo pipefail
 
-arch=
-cmakexe=
-arg1="$1"
-project="true"
-
-if [[ $arg1 == "-e" ]];
-then
-  if [ $# -ne 2 ];
-  then
-    tput setaf 1
-    echo "Usage: rn -e <executable>"
+usage() {
+    echo "Usage: $0 -f <file> | -p <path> [-- args...]" >&2
     exit 1
-  fi
-  cmakexe="$2"
-  arch=$(file -b $cmakexe)
-  project="false"
-else
-  project="true"
-fi
+}
 
-if [[ $project == "true" ]];
-then
-  if [ -f CMakeLists.txt ];
-  then
-    cmakexe=$(cat CMakeLists.txt | grep -oP 'project\(\K[^)]+')
-    winexe="$cmakexe".exe
-    if [ ! -f bin/$cmakexe ] && [ ! -f bin/$winexe ]
-    then
-      tput setaf 1
-      echo "Project is not compiled yet!"
-      exit 1
+resolve_and_exec() {
+    local target="$1"
+    shift
+
+    # Expand a leading ~ manually since it won't be expanded
+    # if it came from a variable/file rather than literal shell input.
+    if [[ "$target" == "~"* ]]; then
+        target="${target/#\~/$HOME}"
     fi
 
-    if [ $# -eq 0 ] && [ ! -f bin/$cmakexe ]
-    then
-      tput setaf 1
-      echo "Native build not found!"
-      exit 1
-    elif [ $# -eq 0 ] && [ -f bin/$cmakexe ]
-    then
-      arch=$(file -b bin/$cmakexe)
+    if [[ -z "$target" ]]; then
+        echo "rn: empty path, nothing to execute" >&2
+        exit 1
     fi
-    
-    if [ "$1" == "win" ] && [ ! -f bin/$winexe ];
-    then
-      tput setaf 1
-      echo "Windows build not found!"
-      exit 1
-    elif [ "$1" == "win" ] && [ -f bin/$winexe ];
-    then
-      arch=$(file -b bin/$winexe)
-    else
-      arch=$(file -b bin/$cmakexe)
+
+    if [[ ! -e "$target" ]]; then
+        echo "rn: no such file: $target" >&2
+        exit 1
     fi
-  fi
-fi
 
+    if [[ ! -x "$target" ]]; then
+        echo "rn: not executable: $target" >&2
+        exit 1
+    fi
 
-if [[ $arch == *"ELF 32-bit"* ]];
-then
-  tput setaf 4
-  echo "ARCHITECTURE : Linux x86"
-  echo -n "RUNNING...."
-  tput setaf 45
-  echo ""
-  if [ -f bin/$cmakexe ];
-  then
-    bin/$cmakexe $@
-  elif [ -f $cmakexe ];
-  then
-    ./$cmakexe $@
-  fi
-elif [[ $arch == *"ELF 64-bit"* ]];
-then
-  tput setaf 4
-  echo "ARCHITECTURE : Linux x86_64"
-  echo -n "Running...."
-  tput setaf 45
-  echo ""
-  if [[ -f bin/$cmakexe && -f .rn ]];
-  then
-    $(cat .rn) bin/$cmakexe $@
-  elif [ -f bin/$cmakexe ];
-  then
-    bin/$cmakexe $@
-  elif [ -f $cmakexe ];
-  then
-    ./$cmakexe $@
-  fi
-elif [[ $arch == *"PE32 executable"* ]];
-then
-  echo "ARCHITECTURE : Windows 32-bit"
-  echo -n "Running...."
-  tput setaf 45
-  echo ""
-  #WINEARCH=win32 WINEPREFIX=~/.wine WINEDEBUG=-all wine bin/$winexename
-  WINEPREFIX=~/.wine WINEARCH=win32 wine bin/$winexe $@
-elif [[ $arch == *"PE32+ executable"* ]];
-then
-  echo "ARCHITECTURE : Windows 64-bit"
-  echo -n "Running...."
-  tput setaf 45
-  echo ""
-  #WINEARCH=win64 WINEPREFIX=~/.wine64 WINEDEBUG=-all wine bin/$winexename
-  WINEPREFIX=~/.wine64 WINEARCH=win64 wine bin/$winexe $@
-else
-  tput setaf 1
-  echo "Unrecognized architecture!"
-fi
-#printf "\n"
+    exec "$target" "$@"
+}
 
+[[ $# -ge 2 ]] || usage
 
+mode="$1"
+arg="$2"
+shift 2 || true
+
+# Anything left over is passed through as args to the target binary.
+case "$mode" in
+    -f)
+        [[ -f "$arg" ]] || { echo "rn: no such file: $arg" >&2; exit 1; }
+        first_line="$(head -n 1 -- "$arg")"
+        resolve_and_exec "$first_line" "$@"
+        ;;
+    -p)
+        resolve_and_exec "$arg" "$@"
+        ;;
+    *)
+        usage
+        ;;
+esac
