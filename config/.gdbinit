@@ -1,2 +1,2 @@
 source /usr/share/gef/gef.py
-set debuginfod enabled on
+set debuginfod enabled off
