@@ -2586,8 +2586,8 @@ imap <C-D> <ESC>:w<Enter>
 "map <C-E> <ESC>:wqa<Enter>
 "imap <C-E> <ESC>:wqa<Enter>
 
-map <C-A> <ESC>ggVG<Enter>
-imap <C-A> <ESC>ggVG<Enter>
+map <C-A> <ESC>ggVG
+imap <C-A> <ESC>ggVG
 
 nnoremap <silent> <C-L> :call SafeExitVim()<CR>
 map <C-Q> <ESC>:q!<Enter>
@@ -3003,6 +3003,19 @@ vim.api.nvim_set_hl(0, "@property.c", { fg="DarkSeaGreen4", bold=true })
 vim.api.nvim_set_hl(0, "@function.method.c", { fg="Green4", bold=true })
 vim.api.nvim_set_hl(0, "@punctuation.delimiter.c", { fg="NvimLightGrey2", bold=true })
 vim.api.nvim_set_hl(0, "@comment.c", { fg="Grey30", bold=true })
+
+
+
+-- Assembly
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "asm",
+    callback = function()
+        vim.cmd([[
+            syntax match asmLocalLabel /\.[A-Za-z_.$?][A-Za-z0-9_.$?]*/
+            highlight default link asmLocalLabel Label
+        ]])
+    end,
+})
 
 
 
