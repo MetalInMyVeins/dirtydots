@@ -2576,6 +2576,16 @@ vim.opt.list = true
 vim.opt.listchars = { tab = "❯ " }   -- chevron (popular in prompts)
 
 
+
+-- Apply asm treesitter syntax in .inc files
+vim.filetype.add({
+  extension = {
+    inc = "asm",
+  },
+})
+
+
+
 -- ===========================
 -- Keymaps
 -- ===========================
@@ -2586,7 +2596,7 @@ imap <C-D> <ESC>:w<Enter>
 "map <C-E> <ESC>:wqa<Enter>
 "imap <C-E> <ESC>:wqa<Enter>
 
-map <C-A> <ESC>ggVG
+nnoremap <C-A> <ESC>ggVG
 imap <C-A> <ESC>ggVG
 
 nnoremap <silent> <C-L> :call SafeExitVim()<CR>
