@@ -2414,7 +2414,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
 
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
-  pattern = { "*.s", "*.S", "*.asm" },
+  pattern = { "*.s", "*.S", "*.asm", "*.inc" },
   callback = function()
     vim.opt_local.tabstop = 8
     vim.opt_local.shiftwidth = 8
