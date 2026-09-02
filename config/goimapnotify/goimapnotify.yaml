@@ -1,0 +1,29 @@
+configurations:
+  -
+    host: imap.gmail.com
+    port: 993
+    tls: true
+    tlsOptions:
+      rejectUnauthorized: true
+      starttls: false
+    username: 'hossainmdfahim66@gmail.com'
+    passwordCMD: 'cat ~/.creds/goimapnotify-hossainmdfahim66 | head -n1'
+    boxes:
+      -
+        mailbox: INBOX
+        onNewMail: 'bash ~/.config/goimapnotify/notify-new-mail.sh hossainmdfahim66'
+        onNewMailPost: SKIP
+  -
+    host: imap.gmail.com
+    port: 993
+    tls: true
+    tlsOptions:
+      rejectUnauthorized: true
+      starttls: false
+    username: 'hossainmdfahim0x3c@gmail.com'
+    passwordCMD: 'cat ~/.creds/goimapnotify-hossainmdfahim0x3c | head -n1'
+    boxes:
+      -
+        mailbox: INBOX
+        onNewMail: 'bash ~/.config/goimapnotify/notify-new-mail.sh hossainmdfahim0x3c'
+        onNewMailPost: SKIP
