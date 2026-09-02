@@ -1,0 +1,6 @@
+#!/bin/bash
+
+tar -czf - -C ~ .creds | openssl enc -aes-256-cbc -pbkdf2 -salt -out ~/creds.tar.gz.enc
+rsync -av --delete ~/creds.tar.gz.enc ~/Backup/dirtydots/
+rm ~/creds.tar.gz.enc
+# openssl enc -d -aes-256-cbc -pbkdf2 -in creds.tar.gz.enc | tar -xzf -
