@@ -2594,8 +2594,8 @@ imap <C-D> <ESC>:w<Enter>
 "map <C-E> <ESC>:wqa<Enter>
 "imap <C-E> <ESC>:wqa<Enter>
 
-nnoremap <C-A> <ESC>ggVG
-imap <C-A> <ESC>ggVG
+map <C-A> <ESC>ggVG<CR>
+imap <C-A> <ESC>ggVG<CR>
 
 nnoremap <silent> <C-L> :call SafeExitVim()<CR>
 map <C-Q> <ESC>:q!<Enter>
