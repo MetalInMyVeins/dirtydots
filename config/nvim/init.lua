@@ -537,12 +537,10 @@ require("lazy").setup({
       "numToStr/Comment.nvim",
       -- Usage: `gc` for visual block, `gcc` for single line
       opts = {
-        -- add any options here
+        pre_hook = function()
+          return vim.bo.commentstring
+        end,
       },
-      config = function()
-        require("Comment").setup({
-        })
-      end
     },
     {
       "yorickpeterse/nvim-window",
