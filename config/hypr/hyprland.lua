@@ -49,6 +49,7 @@ for i = 1, 9 do
 end
 hl.bind(mainMod .. " + 0", switch_to_workspace(10))
 
+hl.bind(mainMod .. " + N", hl.dsp.focus({ workspace = "empty" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 
