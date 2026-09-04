@@ -31,7 +31,24 @@ hl.bind("ALT+SHIFT + Tab", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind("SUPER+SHIFT + Tab", hl.dsp.window.cycle_next({ next = true }))
 hl.bind("ALT + F4", hl.dsp.window.close())
 hl.bind("F12", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
-hl.bind(mainMod .. " + N", hl.dsp.focus({ workspace = "empty" }))
+
+local function switch_to_workspace(n)
+    return function()
+        local workspace = hl.get_workspace(n)
+
+        if workspace == nil then
+            return
+        end
+
+        hl.dispatch(hl.dsp.focus({ workspace = n }))
+    end
+end
+
+for i = 1, 9 do
+    hl.bind(mainMod .. " + " .. i, switch_to_workspace(i))
+end
+hl.bind(mainMod .. " + 0", switch_to_workspace(10))
+
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 
