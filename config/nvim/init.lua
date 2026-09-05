@@ -2515,6 +2515,60 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
 })
 
 
+-- NASM comment continuation.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "asm", "nasm" },
+  callback = function()
+    -- Insert-mode <CR>.
+    vim.keymap.set("i", "<CR>", function()
+      local line = vim.api.nvim_get_current_line()
+      local col = vim.fn.col(".") - 1
+
+      -- Entire line is a comment.
+      local is_comment = line:match("^%s*;%s*") ~= nil
+
+      -- At the very beginning: do not continue the comment.
+      if is_comment and col ~= 0 then
+        return "<CR>; "
+      end
+
+      return "<CR>"
+    end, {
+      buffer = true,
+      expr = true,
+      replace_keycodes = true,
+    })
+
+    -- Normal-mode `o`.
+    vim.keymap.set("n", "o", function()
+      local line = vim.api.nvim_get_current_line()
+
+      if line:match("^%s*;%s*") then
+        return "o; "
+      end
+
+      return "o"
+    end, {
+      buffer = true,
+      expr = true,
+    })
+
+    -- Normal-mode `O`.
+    vim.keymap.set("n", "O", function()
+      local line = vim.api.nvim_get_current_line()
+
+      if line:match("^%s*;%s*") then
+        return "O; "
+      end
+
+      return "O"
+    end, {
+      buffer = true,
+      expr = true,
+    })
+  end,
+})
+
 
 -- ===========================
 -- Syntax and Environment
