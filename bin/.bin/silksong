@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ~/Media/Games/"Hollow Knight Silksong"/
-WINEDLLOVERRIDES="winhttp=n,b" wine Hollow\ Knight\ Silksong\.exe
+WINEDLLOVERRIDES="winhttp=n,b" WINEPREFIX=~/.wine wine "Hollow Knight Silksong.exe"
