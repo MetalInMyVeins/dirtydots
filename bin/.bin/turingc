@@ -1,6 +1,4 @@
 #!/bin/bash
 
-cd ~/Downloads/Games/Turing.Complete.v0.1055/Turing.Complete.v0.1055/
-WINEPREFIX=~/.wine64 WINEARCH=win64 wine "Turing Complete.exe"
-
-
+cd ~/Media/Games/Turing.Complete.v2.1.34/Turing.Complete.v2.1.34/
+WINEDLLOVERRIDES="winhttp=n,b" WINEPREFIX=~/.wine wine "Turing Complete.exe"
