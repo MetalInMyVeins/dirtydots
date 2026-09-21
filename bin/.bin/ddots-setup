@@ -7,6 +7,7 @@ mkdir -p ~/Backup/dirtydots/config
 rsync -av --delete ~/.gdbinit ~/Backup/dirtydots/config
 rsync -av --delete ~/.tmux.conf ~/Backup/dirtydots/config
 
+rsync -av --delete ~/.config/plasma_workspace.notifyrc ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/alacritty ~/Backup/dirtydots/config
 mkdir -p ~/Backup/dirtydots/config/cmus
 rsync -av --delete ~/.config/cmus/autosave ~/Backup/dirtydots/config/cmus
@@ -38,4 +39,4 @@ rm ~/websites.zip
 
 mkdir -p ~/Backup/dirtydots/gamesaves/
 mkdir -p ~/Backup/dirtydots/gamesaves/factorio/
-rsync -av --delete ~/Media/Games/Factorio-2.0.69/game/saves/fact2.zip ~/Backup/dirtydots/gamesaves/factorio/
+# rsync -av --delete ~/Media/Games/Factorio-2.0.69/game/saves/fact2.zip ~/Backup/dirtydots/gamesaves/factorio/

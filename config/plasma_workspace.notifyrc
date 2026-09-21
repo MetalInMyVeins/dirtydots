@@ -1,0 +1,13 @@
+[Event/trashitemdeleted]
+Action=
+Execute=
+Logfile=
+Sound=
+TTS=
+
+[Event/fatalerror]
+Action=
+Execute=
+Logfile=
+Sound=
+TTS=
