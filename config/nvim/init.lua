@@ -2410,6 +2410,23 @@ endfunction
 -- Autocmds
 -- ===========================
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
+  pattern = "*",
+  callback = function(args)
+    local fname = vim.api.nvim_buf_get_name(args.buf)
+    if fname == "" then return end
+    local ext = vim.fn.fnamemodify(fname, ":e")
+    if ext == "" then
+      vim.opt_local.tabstop = 4
+      vim.opt_local.shiftwidth = 4
+      vim.opt_local.softtabstop = 4
+      vim.opt_local.expandtab = false
+      vim.opt_local.autoindent = true
+      vim.opt_local.smartindent = false
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
   pattern = { "*.c", "*.h", "*.cxx", "*.cpp", "*.hxx" },
   callback = function()
     vim.opt_local.tabstop = 4
