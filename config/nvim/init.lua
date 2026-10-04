@@ -2745,6 +2745,7 @@ map <S-T> <ESC>:LaunchFloaterm<Enter>
 " Enter into normal mode in floating terminal
 tnoremap <Esc><Esc> <C-\><C-n>
 tnoremap <leader><BS> <C-\><C-n>
+let g:floaterm_autoinsert = 'always'
 map <leader>\ :FloatermToggle<CR>
 map <leader><BS> :FloatermToggle<CR>lazygit<CR>
 "map <C-B> <ESC><S-T>bdrn<Enter>
