@@ -1,0 +1,3 @@
+#!/bin/bash
+
+kill "$(cat "${XDG_RUNTIME_DIR:-/tmp}/move-reminder.pid")"
