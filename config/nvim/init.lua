@@ -1809,7 +1809,7 @@ require('lualine').setup({
       {
         function()
           if vim.bo.readonly then
-            return '[RO]'
+            return '' -- 󰍁󰌾
           elseif vim.bo.modified then
             return '[+]'
           else
@@ -1819,7 +1819,7 @@ require('lualine').setup({
         --color = { fg = 'Cyan', gui = 'bold' }, -- Customize color
         color = function()
           if vim.bo.readonly then
-            return { fg = 'Cyan', gui = 'bold' }
+            return { fg = 'DeepPink3', gui = 'bold' }
           elseif vim.bo.modified then
             return { fg = 'DeepPink3', gui = 'bold' }
           else
