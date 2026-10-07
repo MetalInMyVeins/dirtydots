@@ -2833,13 +2833,38 @@ vim.opt.linebreak = true
 vim.opt.showbreak = "↪ "
 
 
-local function jk(normal, locked_key)
+-- BLOCK A
+-- local function jk(normal, locked_key)
+--   return function()
+--     return vim.g.view_locked and locked_key or normal
+--   end
+-- end
+-- vim.keymap.set({ "n", "x" }, "j", jk("gj", "<C-e>"), { expr = true })
+-- vim.keymap.set({ "n", "x" }, "k", jk("gk", "<C-y>"), { expr = true })
+
+-- BLOCK B : Replaces BLOCK A
+-- j/k move by screen line normally; while view-locked they scroll the window
+-- and move the cursor the same distance, so it stays on the same screen row.
+local function jk(normal, down)
   return function()
-    return vim.g.view_locked and locked_key or normal
+    if not vim.g.view_locked then
+      return normal
+    end
+    local n
+    if down then
+      n = math.min(vim.v.count1, vim.fn.line("$") - vim.fn.line("w0"))
+    else
+      n = math.min(vim.v.count1, vim.fn.line("w0") - 1)
+    end
+    if n <= 0 then
+      return "" -- already at the first/last scrollable position
+    end
+    return down and (n .. "<C-e>" .. n .. "j") or (n .. "<C-y>" .. n .. "k")
   end
 end
-vim.keymap.set({ "n", "x" }, "j", jk("gj", "<C-e>"), { expr = true })
-vim.keymap.set({ "n", "x" }, "k", jk("gk", "<C-y>"), { expr = true })
+vim.keymap.set({ "n", "x" }, "j", jk("gj", true), { expr = true })
+vim.keymap.set({ "n", "x" }, "k", jk("gk", false), { expr = true })
+
 
 
 -- Go to end of line and insert (a) mode: Alt+M
