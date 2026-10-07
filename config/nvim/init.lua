@@ -2250,6 +2250,32 @@ vim.keymap.set("n", "<leader>he", function()
 end)
 
 
+
+-- View lock: toggle with Shift+L. While locked, j/k scroll the window 1 row
+do
+  local locked = false
+  local modes = { "n", "x" }
+
+  local function scroll(key)
+    return function() return vim.v.count1 .. key end
+  end
+
+  vim.keymap.set("n", "L", function()
+    if locked then
+      pcall(vim.keymap.del, modes, "j")
+      pcall(vim.keymap.del, modes, "k")
+    else
+      vim.keymap.set(modes, "j", scroll("<C-e>"), { expr = true, desc = "View lock: scroll down" })
+      vim.keymap.set(modes, "k", scroll("<C-y>"), { expr = true, desc = "View lock: scroll up" })
+    end
+    locked = not locked
+    vim.g.view_locked = locked -- usable in your statusline
+    vim.notify(locked and "View locked" or "View unlocked")
+  end, { desc = "Toggle view lock" })
+end
+
+
+
 -- ===========================
 -- Functions
 -- ===========================
