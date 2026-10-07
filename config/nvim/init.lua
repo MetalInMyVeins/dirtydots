@@ -1829,7 +1829,15 @@ require('lualine').setup({
         padding = { left = 0, right = 0 },
       },
     },
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    -- lualine_x = {'encoding', 'fileformat', 'filetype'},
+	lualine_x = {
+		{
+			function() return "󰍁" end,
+			cond = function() return vim.g.view_locked == true end,
+			color = { fg = 'Cyan', gui = 'bold' },
+        },
+        'encoding', 'fileformat', 'filetype',
+    },
     lualine_y = {'progress'},
     --lualine_z = {'location'}
     lualine_z = {
@@ -2251,28 +2259,13 @@ end)
 
 
 
--- View lock: toggle with Shift+L. While locked, j/k scroll the window 1 row
-do
-  local locked = false
-  local modes = { "n", "x" }
-
-  local function scroll(key)
-    return function() return vim.v.count1 .. key end
-  end
-
-  vim.keymap.set("n", "L", function()
-    if locked then
-      pcall(vim.keymap.del, modes, "j")
-      pcall(vim.keymap.del, modes, "k")
-    else
-      vim.keymap.set(modes, "j", scroll("<C-e>"), { expr = true, desc = "View lock: scroll down" })
-      vim.keymap.set(modes, "k", scroll("<C-y>"), { expr = true, desc = "View lock: scroll up" })
-    end
-    locked = not locked
-    vim.g.view_locked = locked -- usable in your statusline
-    vim.notify(locked and "View locked" or "View unlocked")
-  end, { desc = "Toggle view lock" })
-end
+-- View lock: toggle with Shift+L. The j/k mappings below and the
+-- lualine "L" indicator both read vim.g.view_locked.
+vim.g.view_locked = false
+vim.keymap.set("n", "L", function()
+  vim.g.view_locked = not vim.g.view_locked
+  vim.cmd.redrawstatus()
+end, { desc = "Toggle view lock" })
 
 
 
@@ -2839,15 +2832,14 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.showbreak = "↪ "
 
--- For long lines, j, k navigation doesn't work: they go
--- through the entire line. This enables navigation by
--- screen lines.
--- Normal mode
-vim.keymap.set("n", "j", "gj", { noremap = true })
-vim.keymap.set("n", "k", "gk", { noremap = true })
--- Visual mode
-vim.keymap.set("v", "j", "gj", { noremap = true })
-vim.keymap.set("v", "k", "gk", { noremap = true })
+
+local function jk(normal, locked_key)
+  return function()
+    return vim.g.view_locked and locked_key or normal
+  end
+end
+vim.keymap.set({ "n", "x" }, "j", jk("gj", "<C-e>"), { expr = true })
+vim.keymap.set({ "n", "x" }, "k", jk("gk", "<C-y>"), { expr = true })
 
 
 -- Go to end of line and insert (a) mode: Alt+M
