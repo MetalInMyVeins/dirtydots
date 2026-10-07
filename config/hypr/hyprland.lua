@@ -53,6 +53,22 @@ hl.bind(mainMod .. " + N", hl.dsp.focus({ workspace = "empty" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 
+-- Rotate the screen: SUPER + Right/Left/Down
+local function rotate_monitor(transform)
+    return function()
+        hl.monitor({
+            output = "eDP-1",
+            mode = "1366x768@60",
+            position = "0x0",
+            scale = "1",
+            transform = transform,
+        })
+    end
+end
+
+hl.bind(mainMod .. " + RIGHT", rotate_monitor(3)) -- portrait right
+hl.bind(mainMod .. " + LEFT",  rotate_monitor(1)) -- portrait left
+hl.bind(mainMod .. " + DOWN",  rotate_monitor(0)) -- landscape (normal)
 
 -- hl.bind("SUPER+SHIFT + right", hl.dsp.exec_cmd("resizeactive 40 0"))
 -- hl.bind("SUPER+SHIFT + left", hl.dsp.exec_cmd("resizeactive -40 0"))
