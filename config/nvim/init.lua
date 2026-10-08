@@ -101,6 +101,7 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 -- optionally enable 24-bit colour
 vim.opt.termguicolors = true
+vim.g.editorconfig = true
 
 if not vim.o.sessionoptions:match("localoptions") then
   vim.o.sessionoptions = vim.o.sessionoptions .. ",localoptions"
@@ -2579,6 +2580,19 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
     vim.opt_local.expandtab = true
     vim.opt_local.autoindent = true
     vim.opt_local.smartindent = false
+  end,
+})
+
+
+-- .editorconfig wins over the per-filetype indentation autocmds above.
+-- Neovim populates vim.b.editorconfig with the properties it applied to
+-- the buffer; if that is non-empty, re-apply them after our defaults ran.
+vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
+  pattern = "*",
+  callback = function(args)
+    if not vim.g.editorconfig then return end
+    if next(vim.b[args.buf].editorconfig or {}) == nil then return end
+    require("editorconfig").config(args.buf)
   end,
 })
 
