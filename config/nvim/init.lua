@@ -380,7 +380,7 @@ require("lazy").setup({
     },
     {
       "sphamba/smear-cursor.nvim",
-      enabled = true,
+      enabled = false,
       opts =
       {
         -- Smear cursor when switching buffers or windows.
@@ -2261,9 +2261,18 @@ end)
 
 -- View lock: toggle with Shift+L. The j/k mappings below and the
 -- lualine "L" indicator both read vim.g.view_locked.
+-- Disable vim-illuminate in locked mode.
 vim.g.view_locked = false
 vim.keymap.set("n", "L", function()
   vim.g.view_locked = not vim.g.view_locked
+  local ok, illuminate = pcall(require, "illuminate")
+  if ok then
+    if vim.g.view_locked then
+      illuminate.pause()
+    else
+      illuminate.resume()
+    end
+  end
   vim.cmd.redrawstatus()
 end, { desc = "Toggle view lock" })
 
