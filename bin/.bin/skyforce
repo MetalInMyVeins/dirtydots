@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/Media/Games/Sky.Force.Anniversary.v2361217/Sky.Force.Anniversary.v2361217/
+WINEPREFIX=~/.wine wine "Sky Force Anniversary.exe"

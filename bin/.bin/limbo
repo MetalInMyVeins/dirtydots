@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/Media/Games/LIMBO/
+WINEPREFIX=~/.wine wine "limbo.exe"
