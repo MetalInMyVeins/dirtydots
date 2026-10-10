@@ -2466,6 +2466,14 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
     vim.opt_local.smartindent = false
   end,
 })
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.c", "*.h", "*.cxx", "*.cpp", "*.hxx" },
+  callback = function()
+    local view = vim.fn.winsaveview()
+    vim.cmd([[keeppatterns %s/\s\+$//e]])
+    vim.fn.winrestview(view)
+  end,
+})
 
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
@@ -2479,7 +2487,14 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
     vim.opt_local.smartindent = false
   end,
 })
-
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.s", "*.S", "*.asm", "*.inc" },
+  callback = function()
+    local view = vim.fn.winsaveview()
+    vim.cmd([[keeppatterns %s/\s\+$//e]])
+    vim.fn.winrestview(view)
+  end,
+})
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
   pattern = { "Makefile", "*.mk" },
