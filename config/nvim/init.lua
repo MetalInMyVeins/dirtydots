@@ -625,6 +625,7 @@ require("lazy").setup({
    --    "RaafatTurki/hex.nvim",
 	  -- config = true
    --  },
+   -- lazy.nvim
 	{
 	  "Punity122333/hexinspector.nvim",
 	  cmd = { "HexEdit", "HexInspect" },
@@ -1159,10 +1160,10 @@ vim.keymap.set('n', '<leader>f', [[:GitGutterToggle<CR>]])
 
 
 -- treesitter --------------------
-require'nvim-treesitter'.install { "asm", "c", "cpp", "make", "cmake", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "toml", "r", "java", "kotlin", "csv", "json", "css", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "hyprlang", "latex", "gitignore", "go", "d", "swift", "zig", "c_sharp" }
+require'nvim-treesitter'.install { "asm", "c", "cpp", "make", "cmake", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "toml", "r", "java", "kotlin", "csv", "json", "css", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "hyprlang", "latex", "gitignore", "go", "d", "zig", "c_sharp" }
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "asm", "c", "cpp", "make", "cmake", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "toml", "r", "java", "kotlin", "csv", "json", "css", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "hyprlang", "latex", "gitignore", "go", "d", "swift", "zig", "c_sharp" },
+  pattern = { "asm", "c", "cpp", "make", "cmake", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "html", "typst", "yaml", "toml", "r", "java", "kotlin", "csv", "json", "css", "rust", "bash", "fish", "regex", "groovy", "yuck", "scss", "ini", "hyprlang", "latex", "gitignore", "go", "d", "zig", "c_sharp" },
   callback = function() vim.treesitter.start() end,
 })
 
