@@ -1687,6 +1687,10 @@ require("ibl").setup
 }
 hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
 
+hooks.register(hooks.type.SKIP_LINE, function(_, _, _, line)
+  return line:match("^%s*$") ~= nil
+end)
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "markdown",
   callback = function()
@@ -2563,7 +2567,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
 
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
-  pattern = { "*.conf", "*.lua", "*.toml" },
+  pattern = { "*.conf", "*.lua", "*.toml", "*.scratch" },
   callback = function()
     vim.opt_local.tabstop = 4
     vim.opt_local.shiftwidth = 4
@@ -2735,7 +2739,6 @@ vim.filetype.add({
 })
 
 
-
 -- ===========================
 -- Keymaps
 -- ===========================
@@ -2785,7 +2788,9 @@ function! s:StartFloatermAndSend() abort
 endfunction
 " Automatically close all floaterm windows when neovim exits
 "autocmd VimLeave * FloatermKill!
-autocmd QuitPre * FloatermKill!
+" buggy: fires on every :q
+"autocmd QuitPre * FloatermKill!
+
 
 command Fmt :%!astyle --mode=c --style=allman -s2
 "command Cmt :!clang-format -i %:p && echo >> %:p
@@ -2821,6 +2826,32 @@ map <leader>t :Twilight<CR>
 map <M-.> :vert res +5<CR>
 map <M-,> :vert res -5<CR>
 ]])
+
+
+
+-- Kill floaterm only when the quit will actually exit Neovim,
+-- i.e. no other non-floating window exists in any tab.
+vim.api.nvim_create_autocmd("QuitPre", {
+  group = vim.api.nvim_create_augroup("FloatermQuit", { clear = true }),
+  callback = function()
+    -- `:q` inside the floating terminal only closes that float
+    if vim.api.nvim_win_get_config(0).relative ~= "" then
+      return
+    end
+
+    local normal_wins = 0
+    for _, win in ipairs(vim.api.nvim_list_wins()) do -- all tabs
+      if vim.api.nvim_win_get_config(win).relative == "" then
+        normal_wins = normal_wins + 1
+      end
+    end
+
+    if normal_wins <= 1 then
+      vim.cmd("silent! FloatermKill!")
+    end
+  end,
+})
+
 
 
 -- ================
