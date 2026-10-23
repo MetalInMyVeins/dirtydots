@@ -1147,7 +1147,19 @@ vim.keymap.set("n", "W", function()
   vim.notify("nvim-tree is not open", vim.log.levels.WARN)
 end, { desc = "Focus nvim-tree if open" })
 
-
+-- Refresh nvim-tree whenever a tab is entered, so its tree
+-- reflects file changes made while another tab was active.
+vim.api.nvim_create_autocmd("TabEnter", {
+  group = vim.api.nvim_create_augroup("NvimTreeTabRefresh", { clear = true }),
+  callback = function()
+    vim.schedule(function()
+      local ok, api = pcall(require, "nvim-tree.api")
+      if ok and api.tree.is_visible() then
+        api.tree.reload()
+      end
+    end)
+  end,
+})
 
 
 
@@ -3219,6 +3231,7 @@ vim.api.nvim_set_hl(0, "@property.c", { fg="DarkSeaGreen4", bold=true })
 vim.api.nvim_set_hl(0, "@function.method.c", { fg="Green4", bold=true })
 vim.api.nvim_set_hl(0, "@punctuation.delimiter.c", { fg="NvimLightGrey2", bold=true })
 vim.api.nvim_set_hl(0, "@comment.c", { fg="Grey30", bold=true })
+vim.api.nvim_set_hl(0, "@attribute.c", { fg="Purple3", bold=true })
 
 
 
