@@ -3,6 +3,7 @@
 
 rsync -av --delete ~/.bin ~/Backup/dirtydots/bin
 
+rsync -av --delete /etc/default/grub ~/Backup/dirtydots/config
 mkdir -p ~/Backup/dirtydots/config
 rsync -av --delete ~/.gdbinit ~/Backup/dirtydots/config
 rsync -av --delete ~/.tmux.conf ~/Backup/dirtydots/config
