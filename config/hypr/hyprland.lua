@@ -239,11 +239,18 @@ hl.permission({ binary = "/usr/(bin|local/bin)/hyprpm", type = "plugin", mode = 
 
 -- Toggle the music scratchpad
 hl.bind("SUPER + Q", hl.dsp.workspace.toggle_special("music"))
+
 -- Auto-launch cmus the first time the workspace is created (empty)
-hl.workspace_rule({
-    workspace = "special:music",
-    on_created_empty = "alacritty -e cmus",
-})
+-- hl.workspace_rule({
+--     workspace = "special:music",
+--     on_created_empty = "alacritty -e cmus",
+-- })
+hl.on("workspace.created", function(ws)
+    if ws.name == "special:music" and ws.is_empty then
+        hl.exec_cmd("alacritty -e cmus", { workspace = ws.name })
+    end
+end)
+
 
 -- TODO: manual review — plugin section ''. The new Lua API exposes plugins via hl.plugin.<name>(...) — wire up per the plugin's docs.
 --[[
@@ -383,5 +390,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("swaync")
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &")
     hl.exec_cmd("goimapnotify -conf /home/metal888/.config/goimapnotify/goimapnotify.yaml")
+    hl.exec_cmd("ffplay ~/.bin/music/smb1_player_down.mp3 -autoexit -nodisp")
     -- hl.exec_cmd("hyprpm reload")
 end)
