@@ -2527,7 +2527,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
 
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
-  pattern = { "userprefs.conf" },
+  pattern = { "userprefs.conf", "*.txt" },
   callback = function()
     vim.opt_local.tabstop = 4
     vim.opt_local.shiftwidth = 4
