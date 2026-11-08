@@ -103,7 +103,7 @@ hl.bind("ALT + C", hl.dsp.exec_cmd("playerctl next"))
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("swaylock"))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("rofi -show drun"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("emote"))
-hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("~/.config/hypr/dictpopup.sh"))
+hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("~/.config/hypr/dictpopupsmart.sh"))
 hl.window_rule({
     name = "dictpopup",
     match = { class = "^dictpopup$" },
