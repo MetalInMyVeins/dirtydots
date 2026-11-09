@@ -280,6 +280,10 @@ require("lazy").setup({
         "nvim-neotest/nvim-nio",
       },
     },
+	{
+     "theHamsta/nvim-dap-virtual-text",
+     dependencies = { "mfussenegger/nvim-dap", "nvim-treesitter/nvim-treesitter" },
+    },
     {
       "folke/lazydev.nvim",
       ft = "lua", -- only load on lua files
@@ -583,13 +587,13 @@ require("lazy").setup({
      --Depending on your nvim distro or config you may need to make the loading not lazy
      --lazy=false,
     },]]--
-    -- {
-    --   "folke/persistence.nvim",
-    --   event = "BufReadPre", -- this will only start session saving when an actual file was opened
-    --   opts = {
-    --     -- add any custom options here
-    --   }
-    -- },
+    {
+      "folke/persistence.nvim",
+      event = "BufReadPre", -- this will only start session saving when an actual file was opened
+      opts = {
+        -- add any custom options here
+      }
+    },
     {
       "natecraddock/sessions.nvim",
       config = function()
@@ -2184,48 +2188,196 @@ autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 
 
 
+-- =====================================================================
+-- n   | <F12>       | Toggle breakpoint (DAP)
+-- n   | <F11>       | Start session (config menu) / continue (DAP)
+-- n   | <F8>        | Step over (DAP)
+-- n   | <F9>        | Step into (DAP)
+-- n   | <F10>       | Step out (DAP)
+-- n   | <leader>bc  | Conditional breakpoint (DAP)
+-- n   | <leader>bl  | Log point (DAP)
+-- n   | <leader>bx  | Clear all breakpoints (DAP)
+-- n   | <leader>bC  | Run to cursor (DAP)
+-- n   | <leader>bR  | Re-run last debug config, no menu (DAP)
+-- n   | <leader>bq  | Stop session and close debug UI (DAP)
+-- n   | <leader>bu  | Toggle debug UI (DAP)
+-- n   | <leader>br  | Toggle REPL / gdb console panel (DAP)
+-- n,v | <leader>be  | Evaluate expression under cursor / selection (DAP)
+-- n   | <leader>bw  | Add expression under cursor to watches (DAP)
+-- =====================================================================
+
+
 -- nvim-dap ------------------
 local dap = require("dap")
+local dapui = require("dapui")
+
+-- Adapter: gdb's built-in DAP server (needs gdb >= 14; check `gdb --version`).
 dap.adapters.gdb = {
   type = "executable",
   command = "gdb",
-  args = { "--interpreter=dap", "--eval-command", "set print pretty on" }
+  args = { "--interpreter=dap", "--eval-command", "set print pretty on" },
 }
 
+-- Executable prompt. Pre-filled with the last one you used, else ./vimbin
+-- (what :CompileCxx builds), else the current directory. <Enter> accepts it.
+local last_program
+local function pick_program()
+  local default = last_program
+  if not default then
+    local vimbin = vim.fn.getcwd() .. "/vimbin"
+    default = (vim.fn.executable(vimbin) == 1) and vimbin or (vim.fn.getcwd() .. "/")
+  end
+  local path = vim.fn.input("Executable: ", default, "file")
+  if path == "" then
+    return dap.ABORT -- Esc / empty input cancels the launch
+  end
+  path = vim.fn.expand(path)
+  last_program = path
+  return path
+end
+
+-- Space-separated arguments (no quoting support).
+local function pick_args()
+  return vim.split(vim.fn.input("Arguments: "), " ", { trimempty = true })
+end
+
+-- Launch configurations. F11 shows this menu when no session is running.
+-- Per-project overrides can go in that project's .nvim.lua (nvim-config-local).
+local gdb_configs = {
+  {
+    name = "Launch",
+    type = "gdb",
+    request = "launch",
+    program = pick_program,
+    cwd = "${workspaceFolder}",
+  },
+  {
+    name = "Launch, stop at main()",
+    type = "gdb",
+    request = "launch",
+    program = pick_program,
+    cwd = "${workspaceFolder}",
+    stopAtBeginningOfMainSubprogram = true,
+  },
+  {
+    name = "Launch with arguments",
+    type = "gdb",
+    request = "launch",
+    program = pick_program,
+    args = pick_args,
+    cwd = "${workspaceFolder}",
+  },
+  {
+    name = "Attach to process",
+    type = "gdb",
+    request = "attach",
+    pid = require("dap.utils").pick_process,
+    cwd = "${workspaceFolder}",
+  },
+}
+dap.configurations.c = gdb_configs
+dap.configurations.cpp = gdb_configs
+dap.configurations.rust = gdb_configs
+dap.configurations.asm = gdb_configs
 
 
+-- Debug UI layout: variables/watches/stack/breakpoints on the left,
+-- one REPL panel (program output + gdb commands) at the bottom.
+dapui.setup({
+  layouts = {
+    {
+      position = "left",
+      size = 40,
+      elements = {
+        { id = "scopes",      size = 0.45 },
+        { id = "watches",     size = 0.20 },
+        { id = "stacks",      size = 0.20 },
+        { id = "breakpoints", size = 0.15 },
+      },
+    },
+    {
+      position = "bottom",
+      size = 12,
+      elements = { { id = "repl", size = 1.0 } },
+    },
+  },
+  floating = { border = "rounded" },
+})
 
-
--- dap-python -----------------
---require("dap-python").setup("python3")
--- If using the above, then `python3 -m debugpy --version`
--- must work in the shell
-
-
--- Example setup for nvim-dap and dap-python
---local dap = require('dap')
-local dapui = require("dapui")
-
--- DAP UI setup
-dapui.setup()
-
--- Auto-open and close DAP UI
+-- Open the UI when a session starts (nvim-tree is closed first so the
+-- side panel has room; reopen it any time with <S-M>).
+-- The UI is deliberately NOT closed when the program exits, so you can
+-- still read its output. Close it with <leader>bq or <leader>bu.
 dap.listeners.after.event_initialized["dapui_config"] = function()
+  pcall(function() require("nvim-tree.api").tree.close() end)
   dapui.open()
 end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
+dap.listeners.after.event_exited["exit_code"] = function(_, body)
+  vim.notify("Program exited with code " .. tostring(body and body.exitCode), vim.log.levels.INFO)
 end
 
-vim.keymap.set('n', '<F12>', function() require('dap').toggle_breakpoint() end)
-vim.keymap.set('n', '<F11>', function() require('dap').continue() end)
-vim.keymap.set('n', '<F8>', function() require('dap').step_over() end)
-vim.keymap.set('n', '<F9>', function() require('dap').step_into() end)
-vim.keymap.set('n', '<F10>', function() require('dap').step_out() end)
-vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
+
+-- Signs and colors for breakpoints / the current line.
+local function dap_highlights()
+  vim.api.nvim_set_hl(0, "DapBreakpoint",          { fg = "#e05252", bold = true })
+  vim.api.nvim_set_hl(0, "DapBreakpointCondition", { fg = "#e0a252", bold = true })
+  vim.api.nvim_set_hl(0, "DapLogPoint",            { fg = "#52a8e0", bold = true })
+  vim.api.nvim_set_hl(0, "DapStopped",             { fg = "#52e07a", bold = true })
+  vim.api.nvim_set_hl(0, "DapStoppedLine",         { bg = "#1f3322" })
+end
+dap_highlights()
+-- Re-apply after startup finishes so the Highlights section further down
+-- in this file can't wipe them.
+vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, { callback = dap_highlights })
+
+vim.fn.sign_define("DapBreakpoint",          { text = "●", texthl = "DapBreakpoint" })
+vim.fn.sign_define("DapBreakpointCondition", { text = "◆", texthl = "DapBreakpointCondition" })
+vim.fn.sign_define("DapLogPoint",            { text = "◇", texthl = "DapLogPoint" })
+vim.fn.sign_define("DapBreakpointRejected",  { text = "✖", texthl = "DapBreakpoint" })
+vim.fn.sign_define("DapStopped",             { text = "▶", texthl = "DapStopped", linehl = "DapStoppedLine" })
+
+
+-- Inline variable values at the end of the line (nvim-dap-virtual-text).
+-- pcall so a missing plugin never breaks startup.
+local vt_ok, virtual_text = pcall(require, "nvim-dap-virtual-text")
+if vt_ok then
+  virtual_text.setup({ virt_text_pos = "eol" })
+end
+
+
+-- Keymaps. The prefix <leader>b is free of clashes with your other maps
+-- (the old <leader>dr made your <leader>d spell toggle wait ~1s).
+local function map(lhs, rhs, desc, mode)
+  vim.keymap.set(mode or "n", lhs, rhs, { desc = "DAP: " .. desc })
+end
+
+-- Stepping (same F-keys as before)
+map("<F6>", function() dap.toggle_breakpoint() end, "toggle breakpoint")
+map("<F11>", function() dap.continue() end,          "start / continue")
+map("<F8>",  function() dap.step_over() end,         "step over")
+map("<F9>",  function() dap.step_into() end,         "step into")
+map("<F10>", function() dap.step_out() end,          "step out")
+
+-- Breakpoints
+map("<leader>bc", function() dap.set_breakpoint(vim.fn.input("Break when: ")) end, "conditional breakpoint")
+map("<leader>bl", function() dap.set_breakpoint(nil, nil, vim.fn.input("Log message: ")) end, "log point")
+map("<leader>bx", function() dap.clear_breakpoints() end, "clear all breakpoints")
+
+-- Running
+map("<leader>bC", function() dap.run_to_cursor() end, "run to cursor")
+map("<leader>bR", function() dap.run_last() end,      "re-run last config")
+map("<leader>bq", function()
+  dap.terminate()
+  dapui.close()
+end, "stop session and close UI")
+
+-- Inspecting
+map("<leader>bu", function() dapui.toggle() end, "toggle debug UI")
+map("<leader>br", function() dapui.toggle({ layout = 2 }) end, "toggle REPL panel")
+map("<leader>be", function() require("dap.ui.widgets").hover() end, "evaluate under cursor / selection", { "n", "v" })
+map("<leader>bw", function()
+  dapui.elements.watches.add(vim.fn.expand("<cexpr>"))
+end, "add expression to watches")
 
 
 
