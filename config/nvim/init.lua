@@ -295,6 +295,45 @@ require("lazy").setup({
         },
       },
     },
+	{
+	  "mfussenegger/nvim-lint",
+	  event = { "BufReadPre", "BufNewFile" },
+	  config = function()
+		local lint = require("lint")
+
+		local args = {
+		  "--quiet",
+		  "--checks=-*,clang-analyzer-*,-clang-analyzer-optin.performance.Padding,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-clang-diagnostic-*",
+		  "--extra-arg=-Wno-error", -- your Makefile uses -Werror
+		}
+		-- same .clangd-db convention as your clangd_cmd()
+		local f = io.open(vim.fn.getcwd() .. "/.clangd-db", "r")
+		if f then
+		  local dir = f:read("*l")
+		  f:close()
+		  if dir and dir ~= "" then
+			table.insert(args, "-p=" .. vim.fn.getcwd() .. "/" .. dir)
+		  end
+		end
+		lint.linters.clangtidy.args = args
+
+		-- clangd already reports everything the compile db flags produce;
+		-- drop any clang-diagnostic-* that survives --checks (errors promoted by -Werror/-pedantic-errors)
+		local base_parser = lint.linters.clangtidy.parser
+		lint.linters.clangtidy.parser = function(output, bufnr, linter_cwd)
+		  local diagnostics = base_parser(output, bufnr, linter_cwd)
+		  return vim.tbl_filter(function(d)
+			return not (tostring(d.code or "") .. (d.message or "")):find("clang-diagnostic-", 1, true)
+		  end, diagnostics)
+		end
+		lint.linters_by_ft = { c = { "clangtidy" } }
+
+		vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
+		  pattern = "*.c",
+		  callback = function() lint.try_lint() end,
+		})
+	  end,
+    },
     --[[{
       'mfussenegger/nvim-dap-python',
     },]]--
