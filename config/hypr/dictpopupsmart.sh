@@ -3,7 +3,7 @@
 APPID=dictpopup
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/dictpopup"
 BREAKER="${XDG_RUNTIME_DIR:-/tmp}/dictpopup.web-down"
-BREAKER_TTL=90        # seconds to skip the web after it fails
+BREAKER_TTL=10        # seconds to skip the web after it fails
 DICT_HOST=localhost
 
 dim() { printf '\033[2m%s\033[0m\n' "$1"; }
