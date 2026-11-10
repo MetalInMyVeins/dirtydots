@@ -301,9 +301,9 @@ require("lazy").setup({
 	  config = function()
 		local lint = require("lint")
 
+		-- No --checks: the check set comes entirely from the local .clang-tidy.
 		local args = {
 		  "--quiet",
-		  "--checks=-*,clang-analyzer-*,-clang-analyzer-optin.performance.Padding,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-clang-diagnostic-*",
 		  "--extra-arg=-Wno-error", -- your Makefile uses -Werror
 		}
 		-- same .clangd-db convention as your clangd_cmd()
@@ -318,7 +318,7 @@ require("lazy").setup({
 		lint.linters.clangtidy.args = args
 
 		-- clangd already reports everything the compile db flags produce;
-		-- drop any clang-diagnostic-* that survives --checks (errors promoted by -Werror/-pedantic-errors)
+		-- drop any clang-diagnostic-* that survives (errors promoted by -Werror/-pedantic-errors)
 		local base_parser = lint.linters.clangtidy.parser
 		lint.linters.clangtidy.parser = function(output, bufnr, linter_cwd)
 		  local diagnostics = base_parser(output, bufnr, linter_cwd)
@@ -327,6 +327,58 @@ require("lazy").setup({
 		  end, diagnostics)
 		end
 		lint.linters_by_ft = { c = { "clangtidy" } }
+
+		-- clangd wins: drop any lint diagnostic that clangd already reports
+		-- (same line AND same check name or same message). What remains is
+		-- what clangd cannot catch, e.g. clang-analyzer-* findings.
+		local lint_ns = lint.get_namespace("clangtidy")
+
+		local function norm_msg(m)
+		  m = (m or ""):match("[^\n]*"):lower()
+		  m = m:gsub("%s*%(fix available%)%s*$", "")
+		  m = m:gsub("%s+", " ")
+		  return m
+		end
+
+		local function code_set(c)
+		  local s = {}
+		  for name in tostring(c or ""):gmatch("[^,%s]+") do s[name] = true end
+		  return s
+		end
+
+		local function same(a, b) -- a = lint diagnostic, b = clangd diagnostic
+		  if a.lnum ~= b.lnum then return false end
+		  local theirs = code_set(b.code)
+		  for name in pairs(code_set(a.code)) do
+			if theirs[name] then return true end
+		  end
+		  return norm_msg(a.message) == norm_msg(b.message)
+		end
+
+		local function dedupe(bufnr)
+		  local mine = vim.diagnostic.get(bufnr, { namespace = lint_ns })
+		  if #mine == 0 then return end
+		  local theirs = {}
+		  for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr, name = "clangd" })) do
+			vim.list_extend(theirs, vim.diagnostic.get(bufnr,
+			  { namespace = vim.lsp.diagnostic.get_namespace(client.id) }))
+		  end
+		  if #theirs == 0 then return end
+		  local kept = vim.tbl_filter(function(a)
+			for _, b in ipairs(theirs) do
+			  if same(a, b) then return false end
+			end
+			return true
+		  end, mine)
+		  if #kept < #mine then
+			vim.diagnostic.set(lint_ns, bufnr, kept)
+		  end
+		end
+
+		-- runs whenever either side publishes, so order of arrival doesn't matter
+		vim.api.nvim_create_autocmd("DiagnosticChanged", {
+		  callback = function(args) dedupe(args.buf) end,
+		})
 
 		vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
 		  pattern = "*.c",
@@ -1691,6 +1743,22 @@ vim.keymap.set("i", "<C-E>", function()
   end
 end, { desc = "Close floating windows" })
 
+
+-- code actions: <leader>a (normal = at cursor, visual = on selection)
+vim.keymap.set('n', '<leader>a', function()
+  if vim.tbl_isempty(vim.lsp.get_clients({ bufnr = 0 })) then
+    vim.notify('No LSP client attached to this buffer', vim.log.levels.WARN)
+    return
+  end
+  -- Lspsaga's menu, falling back to Neovim's built-in picker if it errors
+  if not pcall(vim.cmd, 'Lspsaga code_action') then
+    vim.lsp.buf.code_action()
+  end
+end, { desc = 'LSP: code action' })
+
+-- visual mode uses the built-in version so the selection range is passed correctly
+vim.keymap.set('v', '<leader>a', function() vim.lsp.buf.code_action() end,
+  { desc = 'LSP: code action (selection)' })
 
 
 
