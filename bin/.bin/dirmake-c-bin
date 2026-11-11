@@ -6,6 +6,7 @@ cp -r ~/devel/langs/c/binary/include/ .
 cp -r ~/devel/langs/c/binary/src/ .
 cp ~/devel/langs/c/binary/Makefile .
 cp ~/devel/langs/c/binary/.clangd .
+cp ~/devel/langs/c/binary/.clang-format .
 cp ~/devel/langs/c/binary/.clang-tidy .
 cp ~/devel/langs/c/binary/.envrc .
 cp ~/devel/langs/c/binary/.gitignore .
