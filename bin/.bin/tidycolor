@@ -1,0 +1,312 @@
+#!/usr/bin/env perl
+# tidycolor: vibrant colorizer for clang-tidy / run-clang-tidy output (stdin).
+use strict;
+use warnings;
+use utf8;
+use Cwd qw(getcwd);
+
+binmode(STDIN,  ':encoding(UTF-8)');
+binmode(STDOUT, ':encoding(UTF-8)');
+$| = 1;
+
+# Plain passthrough unless stdout is a terminal (or TIDYCOLOR=always).
+if (!-t STDOUT && ($ENV{TIDYCOLOR} // '') ne 'always') {
+    print while <STDIN>;
+    exit 0;
+}
+
+# ---------------------------------------------------------------- colors
+my $TRUE = (($ENV{COLORTERM} // '') =~ /truecolor|24bit/i) ? 1 : 0;
+$TRUE = $ENV{TIDYCOLOR_TRUECOLOR} if defined $ENV{TIDYCOLOR_TRUECOLOR};
+
+my $R = "\e[0m";
+my $B = "\e[1m";
+my $I = "\e[3m";
+
+sub rgb { my ($h) = @_; $h =~ s/^#//; return map { hex } $h =~ /(..)(..)(..)/; }
+sub hex3 { return sprintf('#%02x%02x%02x', @_); }
+
+sub c256 {
+    my ($r, $g, $bl) = @_;
+    my $q = sub { my $v = shift; return $v < 48 ? 0 : $v < 115 ? 1 : int(($v - 35) / 40); };
+    return 16 + 36 * $q->($r) + 6 * $q->($g) + $q->($bl);
+}
+
+sub sgr {
+    my ($kind, @c) = @_;
+    @c = rgb($c[0]) if @c == 1;
+    return "\e[$kind;2;$c[0];$c[1];$c[2]m" if $TRUE;
+    return "\e[$kind;5;" . c256(@c) . 'm';
+}
+sub fg { return sgr(38, @_); }
+sub bg { return sgr(48, @_); }
+
+sub lerp {
+    my ($c1, $c2, $t) = @_;
+    my @x = rgb($c1);
+    my @y = rgb($c2);
+    return map { int($x[$_] + ($y[$_] - $x[$_]) * $t + 0.5) } 0 .. 2;
+}
+
+# Per-character gradient between two hex colors.
+sub grad {
+    my ($text, $c1, $c2) = @_;
+    my @ch = split //, $text;
+    my $n  = @ch;
+    my $o  = '';
+    for my $i (0 .. $n - 1) {
+        $o .= fg(lerp($c1, $c2, $n > 1 ? $i / ($n - 1) : 0)) . $ch[$i];
+    }
+    return $o;
+}
+
+# Severity styles: badge colors plus the caret gradient endpoints.
+my %SEV = (
+    warning => { badge => '#f1fa8c', fg => '#282a36', text => 'WARNING', c1 => '#ffb86c', c2 => '#ff79c6' },
+    error   => { badge => '#ff5555', fg => '#ffffff', text => 'ERROR',   c1 => '#ff5555', c2 => '#ffb86c' },
+    note    => { badge => '#8be9fd', fg => '#282a36', text => 'NOTE',    c1 => '#8be9fd', c2 => '#50fa7b' },
+    remark  => { badge => '#bd93f9', fg => '#282a36', text => 'REMARK',  c1 => '#bd93f9', c2 => '#ff79c6' },
+);
+
+# Check-family colors; edit freely.
+my %FAM = (
+    'clang-analyzer'   => '#ff9e64',
+    'clang-diagnostic' => '#6272a4',
+    bugprone           => '#ff5555',
+    cert               => '#ff79c6',
+    concurrency        => '#8be9fd',
+    misc               => '#bd93f9',
+    performance        => '#f1fa8c',
+    portability        => '#1abc9c',
+    readability        => '#7aa2f7',
+    android            => '#98c379',
+    cppcoreguidelines  => '#50fa7b',
+);
+
+sub badge {
+    my ($sv, $pad) = @_;
+    my $s = $SEV{$sv};
+    return $B . fg($s->{badge}) . sprintf($pad ? '%-7s' : '%s', lc $s->{text}) . $R;
+}
+
+sub split_check {
+    my ($name) = @_;
+    my ($fam) = $name =~ /^(clang-[a-z]+|[a-z]+)/;
+    $fam //= '';
+    return ($fam, substr($name, length $fam));
+}
+
+sub paint_check {
+    my ($name) = @_;
+    return fg('#6272a4') . $name . $R if $name =~ /^[-(]/;
+    my ($fam, $rest) = split_check($name);
+    my $c = $FAM{$fam} // '#c0caf5';
+    return $B . fg($c) . $fam . $R . fg(lerp($c, '#ffffff', 0.45)) . $rest . $R;
+}
+
+sub quoted {
+    my ($t) = @_;
+    return fg('#ffcb6b') . $B . "'" . $t . "'" . $R . fg('#f8f8f2');
+}
+
+sub paint_msg {
+    my ($m) = @_;
+    $m =~ s/'([^']*)'/quoted($1)/ge;
+    return fg('#f8f8f2') . $m . $R;
+}
+
+# ---------------------------------------------- C source line highlighter
+my %KW_CTRL  = map { $_ => 1 } qw(if else for while do switch case default break continue return goto);
+my %KW_STOR  = map { $_ => 1 } qw(static extern inline const volatile register restrict typedef
+                                  struct union enum sizeof alignof alignas typeof typeof_unqual
+                                  constexpr auto _Atomic _Alignas _Alignof _Static_assert
+                                  static_assert _Thread_local thread_local asm __asm__
+                                  __attribute__ __typeof__);
+my %KW_TYPE  = map { $_ => 1 } qw(void char short int long float double signed unsigned bool
+                                  _Bool _Complex FILE va_list);
+my %KW_CONST = map { $_ => 1 } qw(true false NULL nullptr);
+
+sub hl_code {
+    my ($s) = @_;
+    my $o = '';
+    while ($s =~ m{\G(?:
+            (//.*)
+          | (/\*.*?(?:\*/|$))
+          | ("(?:[^"\\]|\\.)*"?|'(?:[^'\\]|\\.)*'?)
+          | (\#\s*\w+)
+          | (0[xXbB][0-9a-fA-F']+[uUlL]*|\d[\d']*(?:\.\d+)?(?:[eE][+-]?\d+)?[uUlLfF]*)
+          | ([A-Za-z_]\w*)
+          | (\s+)
+          | (.)
+        )}gcx) {
+        my @m = ($1, $2, $3, $4, $5, $6, $7, $8);
+        if    (defined $m[0]) { $o .= $I . fg('#6272a4') . $m[0] . $R; }
+        elsif (defined $m[1]) { $o .= $I . fg('#6272a4') . $m[1] . $R; }
+        elsif (defined $m[2]) { $o .= fg('#f1fa8c') . $m[2] . $R; }
+        elsif (defined $m[3]) { $o .= $B . fg('#ff6ac1') . $m[3] . $R; }
+        elsif (defined $m[4]) { $o .= fg('#ff9e64') . $m[4] . $R; }
+        elsif (defined $m[5]) {
+            my $w    = $m[5];
+            my $call = substr($s, pos($s)) =~ /^\s*\(/;
+            if    ($KW_CTRL{$w})                      { $o .= $B . fg('#ff79c6') . $w . $R; }
+            elsif ($KW_STOR{$w})                      { $o .= fg('#bd93f9') . $w . $R; }
+            elsif ($KW_CONST{$w})                     { $o .= $B . fg('#ffb86c') . $w . $R; }
+            elsif ($KW_TYPE{$w} || $w =~ /^\w+_t$/)   { $o .= $I . fg('#8be9fd') . $w . $R; }
+            elsif ($call)                             { $o .= fg('#50fa7b') . $w . $R; }
+            elsif ($w =~ /^[A-Z][A-Z0-9_]+$/)         { $o .= fg('#ffb86c') . $w . $R; }
+            else                                      { $o .= fg('#d6deeb') . $w . $R; }
+        }
+        elsif (defined $m[6]) { $o .= $m[6]; }
+        else                  { $o .= fg('#9aa5ce') . $m[7] . $R; }
+    }
+    return $o;
+}
+
+sub paint_caret {
+    my ($carets, $sv) = @_;
+    my $s  = $SEV{$sv} // $SEV{warning};
+    my @ch = split //, $carets;
+    my $n  = grep { $_ ne ' ' } @ch;
+    my ($k, $o) = (0, '');
+    for my $c (@ch) {
+        if ($c eq ' ') { $o .= ' '; next; }
+        $o .= $B . fg(lerp($s->{c1}, $s->{c2}, $n > 1 ? $k / ($n - 1) : 0)) . $c;
+        $k++;
+    }
+    return $o . $R;
+}
+
+# ---------------------------------------------------------- summary bars
+sub bars {
+    my ($title, $h, $limit, $color_of, $paint_of) = @_;
+    my @keys = sort { $h->{$b} <=> $h->{$a} || $a cmp $b } keys %$h;
+    return unless @keys;
+    @keys = @keys[0 .. $limit - 1] if @keys > $limit;
+    my $max = $h->{ $keys[0] };
+    my $w   = 0;
+    for my $k (@keys) { $w = length $k if length $k > $w; }
+    print '  ' . $B . fg('#bd93f9') . $title . $R . "\n";
+    for my $k (@keys) {
+        my $n = int(28 * $h->{$k} / $max + 0.5);
+        $n = 1 if $n < 1;
+        my $c = $color_of->($k);
+        print '   ' . $paint_of->($k) . (' ' x ($w - length $k)) . ' '
+            . grad('█' x $n, $c, hex3(lerp($c, '#ffffff', 0.55))) . $R
+            . ' ' . $B . fg('#f8f8f2') . $h->{$k} . $R . "\n";
+    }
+    print "\n";
+}
+
+# ------------------------------------------------------------- main loop
+my $cwd    = getcwd();
+my $cursev = 'warning';
+my (%seen, %total, %byfile, %bycheck, %byfam);
+my $lines = 0;
+my ($files_checked, $failed) = (0, 0);
+
+while (my $l = <STDIN>) {
+    chomp $l;
+	$l =~ s/\e\[[0-9;]*[A-Za-z]//g;
+    $lines++;
+    # Hard failures of run-clang-tidy itself (missing database, traceback, make error).
+    $failed++ if $l =~ /^(?:Traceback \(most recent call last\)|make: \*\*\*|Error while trying to load a compilation database|No compilation database found|[A-Za-z]*Error: )/;
+
+    # file:line:col: severity: message [check,check]
+    if ($l =~ m{^(.+?):(\d+):(\d+): (warning|error|note|remark): (.*?)(?: \[([^\]]+)\])?$}) {
+        my ($file, $ln, $col, $sv, $msg, $chk) = ($1, $2, $3, $4, $5, $6);
+        $cursev = $sv;
+        $file =~ s{^\Q$cwd\E/}{};
+        my ($dir, $base) = $file =~ m{^(.*/)?([^/]+)$};
+        $dir //= '';
+
+        # Tally unique findings (the same header finding repeats per includer).
+        if ($sv eq 'warning' || $sv eq 'error') {
+            my $key = join("\0", $file, $ln, $col, $msg);
+            if (!$seen{$key}++) {
+                $total{$sv}++;
+                $byfile{$file}++;
+                for my $c (defined $chk ? split(/,/, $chk) : ('(compiler)')) {
+                    my ($fam) = split_check($c);
+                    $bycheck{$c}++;
+                    $byfam{ $fam || 'other' }++;
+                }
+            }
+        }
+
+        my $out = fg('#6272a4') . $dir
+                . $B . grad($base, '#8be9fd', '#bd93f9') . $R
+                . fg('#44475a') . ':' . fg('#ffb86c') . $ln
+                . fg('#44475a') . ':' . fg('#ff79c6') . $col . $R . ' '
+                . badge($sv, 1) . ' '
+                . paint_msg($msg);
+        if (defined $chk) {
+            my $sep  = fg('#44475a');
+            my $tags = join($sep . ',', map { paint_check($_) } split /,/, $chk);
+            $out .= ' ' . $sep . '[' . $tags . $sep . ']' . $R;
+        }
+        print $out . "\n";
+    }
+    # "   12 |     code"
+    elsif ($l =~ /^(\s*)(\d+)( \| ?)(.*)$/) {
+        my ($sp, $num, $bar, $code) = ($1, $2, $3, $4);
+        print $sp . $B . fg('#7aa2f7') . $num . $R . fg('#44475a') . $bar . $R
+            . hl_code($code) . $R . "\n";
+    }
+    # "      |     ^~~~"
+    elsif ($l =~ /^(\s*\|\s*)([\^~][\^~ ]*)$/) {
+        print fg('#44475a') . $1 . $R . paint_caret($2, $cursev) . "\n";
+    }
+    # fix-it hint or empty gutter line
+    elsif ($l =~ /^(\s*\|)\s?(.*)$/) {
+        my ($bar, $rest) = ($1, $2);
+        print fg('#44475a') . $bar . $R
+            . ($rest ne '' ? ' ' . $B . fg('#50fa7b') . $rest . $R : '') . "\n";
+    }
+    elsif ($l =~ /^Error while processing/) {
+        print $B . fg('#ff5555') . $l . $R . "\n";
+    }
+    elsif ($l =~ /^(Suppressed \d+ warnings|Use -header-filter|\d+ warnings? generated|\d+ errors? generated|Running clang-tidy in )/
+        || $l =~ m{^(?:\[\d+/\d+\](?:\[[\d.]+s\])?\s+)?(?:\S*/)?(?:run-)?clang-tidy\S*\s}) {
+        # per-file invocation lines (old and new run-clang-tidy formats) count as "a file was checked"
+        $files_checked++ if $l =~ m{^(?:\[\d+/\d+\](?:\[[\d.]+s\])?\s+)?(?:\S*/)?clang-tidy\S*\s};
+        print $I . fg('#565f89') . $l . $R . "\n";
+    }
+    else {
+        print $l . "\n";
+    }
+}
+
+# ---------------------------------------------------------------- footer
+exit 0 unless $lines;
+
+my $nw = $total{warning} // 0;
+my $ne = $total{error}   // 0;
+print "\n";
+if ($failed) {
+    print $B . fg('#ff5555') . '✘ clang-tidy did not complete; see the errors above' . $R . "\n";
+    exit 0;
+}
+if ($nw + $ne == 0) {
+    if ($files_checked) {
+        print $B . fg('#50fa7b') . '✔ ' . grad("$files_checked file(s) checked, no warnings or errors", '#50fa7b', '#8be9fd') . $R . "\n";
+    }
+    else {
+        print $B . fg('#f1fa8c') . '⚠ no files were checked (is compile_commands.json missing or empty? try: make cdb)' . $R . "\n";
+    }
+    exit 0;
+}
+print $B . grad('━━━━━━━━ clang-tidy summary ━━━━━━━━', '#ff79c6', '#8be9fd') . $R . "\n";
+print '  ' . badge('warning') . ' ' . $B . fg('#f1fa8c') . $nw . $R . '   '
+    . badge('error') . ' ' . $B . fg('#ff5555') . $ne . $R . '   '
+    . fg('#6272a4') . scalar(keys %byfile) . ' files affected' . $R . "\n\n";
+
+# bars('categories', \%byfam, 12,
+#     sub { $FAM{ $_[0] } // '#c0caf5' },
+#     sub { $B . fg($FAM{ $_[0] } // '#c0caf5') . $_[0] . $R });
+# bars('top checks', \%bycheck, 10,
+#     sub { my ($f) = split_check($_[0]); $FAM{$f} // '#c0caf5' },
+#     sub { paint_check($_[0]) });
+# bars('top files', \%byfile, 8,
+#     sub { '#8be9fd' },
+#     sub { my ($d, $f) = $_[0] =~ m{^(.*/)?([^/]+)$};
+#           fg('#6272a4') . ($d // '') . $B . fg('#8be9fd') . $f . $R });

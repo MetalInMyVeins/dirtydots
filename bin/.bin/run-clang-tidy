@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Local shim: run the real run-clang-tidy, colorize through tidycolor.
+self=$(readlink -f "$0")
+real=
+IFS=: read -ra dirs <<< "$PATH"
+for d in "${dirs[@]}"; do
+  c="$d/run-clang-tidy"
+  if [[ -x $c && $(readlink -f "$c") != "$self" ]]; then real=$c; break; fi
+done
+[[ -n $real ]] || { echo "real run-clang-tidy not found in PATH" >&2; exit 127; }
+
+set -o pipefail
+"$real" "$@" 2>&1 | tidycolor
