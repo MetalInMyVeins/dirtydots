@@ -1,0 +1,13 @@
+#!/bin/bash
+
+mkdir -p $1
+cd $1
+cp -r ~/devel/langs/c/library/include/ .
+cp -r ~/devel/langs/c/library/src/ .
+cp ~/devel/langs/c/library/Makefile .
+cp ~/devel/langs/c/library/.clangd .
+cp ~/devel/langs/c/library/.clang-format .
+cp ~/devel/langs/c/library/.clang-tidy .
+cp ~/devel/langs/c/library/.envrc .
+cp ~/devel/langs/c/library/.gitignore .
+direnv allow .
