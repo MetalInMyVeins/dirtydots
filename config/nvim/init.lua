@@ -3308,7 +3308,10 @@ hi NewBlue guibg=NONE guifg=#5e9499 gui=bold cterm=bold
 
 
 
-hi Normal cterm=bold gui=bold guibg=none guifg=#a0a0a0
+" Stable color foundation
+"hi Normal cterm=bold gui=bold guibg=none guifg=#a0a0a0
+" Unstable
+hi Normal cterm=bold gui=bold
 " hi Comment cterm=none guifg=Grey30
 hi Comment cterm=none guifg=Grey35
 hi Function cterm=bold guifg=Green4
