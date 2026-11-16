@@ -9,4 +9,4 @@ tput setaf 4
 echo "Folder: Pdf_Files"
 read -p "Confirmed to continue? (yes): " confirm && [[ $confirm == "yes" ]] || exit 1
 tput setaf 6
-rclone sync hossain8:Books ~/Books -P
+rclone sync hossain8:Books ~/HDD/Media/Books -P
