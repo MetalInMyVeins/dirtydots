@@ -1,0 +1,13 @@
+#!/bin/bash
+
+mkdir -p $1
+cd $1
+cp -r ~/devel/langs/cpp/library/include/ .
+cp -r ~/devel/langs/cpp/library/src/ .
+cp ~/devel/langs/cpp/library/Makefile .
+cp ~/devel/langs/cpp/library/.clangd .
+cp ~/devel/langs/cpp/library/.clang-format .
+cp ~/devel/langs/cpp/library/.clang-tidy .
+cp ~/devel/langs/cpp/library/.envrc .
+cp ~/devel/langs/cpp/library/.gitignore .
+direnv allow .
