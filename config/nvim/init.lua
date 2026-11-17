@@ -200,22 +200,6 @@ require("lazy").setup({
     },
     {
       'hrsh7th/nvim-cmp',
-      opts = function(_, opts)
-        opts.sources = opts.sources or {}
-        table.insert(opts.sources, {
-          name = "lazydev",
-          group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-        })
-      end,
-    },
-    {
-      'hrsh7th/cmp-vsnip',
-    },
-    {
-      'hrsh7th/vim-vsnip',
-    },
-    {
-      'hrsh7th/vim-vsnip-integ',
     },
     {
       "lukas-reineke/indent-blankline.nvim",
@@ -1096,15 +1080,27 @@ end, { nargs = 1 })
 -- nvim-autopairs provides autocompletion of braces and quotes
 -- Going past the closing braces or quotes is a pain with arrows
 -- This enables going past them pressing Tab
-vim.keymap.set("i", "<Tab>", function()
+-- Also jumps to the next/previous placeholder when a native snippet is active
+-- (rust-analyzer returns many snippets with ${1:...} placeholders).
+vim.keymap.set({ "i", "s" }, "<Tab>", function()
+  if vim.snippet.active({ direction = 1 }) then
+    return "<Cmd>lua vim.snippet.jump(1)<CR>"
+  end
   local col = vim.fn.col(".")
   local line = vim.fn.getline(".")
   local next_char = line:sub(col, col)
-  if next_char:match("[%]%)}'\"]") then
+  if vim.fn.mode() == "i" and next_char:match("[%]%)}'\"]") then
     return "<Right>"
   else
     return "<Tab>"
   end
+end, { expr = true, noremap = true })
+
+vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
+  if vim.snippet.active({ direction = -1 }) then
+    return "<Cmd>lua vim.snippet.jump(-1)<CR>"
+  end
+  return "<S-Tab>"
 end, { expr = true, noremap = true })
 
 
@@ -1326,6 +1322,11 @@ require("markview.extras.headings").setup();
 
 
 -- nvim-lspconfig ---------------------
+-- Advertise nvim-cmp completion capabilities to every LSP server.
+-- Per-server configuration can still extend or override these defaults.
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+vim.lsp.config('*', { capabilities = capabilities })
+
 -- vim.lsp.enable('basedpyright')
 
 
@@ -1389,25 +1390,21 @@ local function clangd_cmd()
     }
 end
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-vim.lsp.enable('clangd')
 vim.lsp.config('clangd', {
   cmd = clangd_cmd(),
-  capabilities = capabilities,
 })
+vim.lsp.enable('clangd')
 
 
 vim.lsp.enable('r_language_server')
 
 
-vim.lsp.enable('cmake')
-vim.lsp.config('cmake-language-server',
-{
+vim.lsp.config('cmake', {
   cmd = { "cmake-language-server" },
 })
+vim.lsp.enable('cmake')
 
 
-vim.lsp.enable('jdtls')
 vim.lsp.config('jdtls',
 {
   cmd = { "jdtls" },
@@ -1419,12 +1416,12 @@ vim.lsp.config('jdtls',
     end
   end,
 })
+vim.lsp.enable('jdtls')
 
 
 vim.lsp.enable('bashls')
 
 
-vim.lsp.enable('fish_lsp')
 vim.lsp.config('fish_lsp',
 {
   cmd = { "fish-lsp", "start" },
@@ -1432,21 +1429,45 @@ vim.lsp.config('fish_lsp',
   filetypes = { "fish" },
   root_markers = { ".git" },
 })
+vim.lsp.enable('fish_lsp')
 
-
-
-vim.lsp.enable('rust_analyzer')
 
 vim.lsp.config('rust_analyzer', {
-  capabilities = capabilities,
   settings = {
     ['rust-analyzer'] = {
-      cargo = { allFeatures = true },
+      cargo = { features = "all" },
       diagnostics = { enable = true },
-      checkOnSave = { command = "clippy" },
+      check = { command = "clippy" },
     },
   },
 })
+vim.lsp.enable('rust_analyzer')
+
+
+
+-- Enable LSP inlay hints globally. Neovim requests them only from clients
+-- that support textDocument/inlayHint, regardless of language or server name.
+-- Omitting the buffer filter applies this preference to all current and future
+-- buffers.
+vim.lsp.inlay_hint.enable(true)
+
+-- These commands control inlay hints globally, across all buffers.
+local function set_inlay_hints(enabled)
+  vim.lsp.inlay_hint.enable(enabled)
+  vim.notify("Inlay hints " .. (enabled and "enabled" or "disabled") .. " globally")
+end
+
+vim.api.nvim_create_user_command("InlayHintsEnable", function()
+  set_inlay_hints(true)
+end, { desc = "Enable LSP inlay hints globally" })
+
+vim.api.nvim_create_user_command("InlayHintsDisable", function()
+  set_inlay_hints(false)
+end, { desc = "Disable LSP inlay hints globally" })
+
+vim.api.nvim_create_user_command("InlayHintsToggle", function()
+  set_inlay_hints(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = "Toggle LSP inlay hints globally" })
 
 
 
@@ -1546,14 +1567,22 @@ vim.lsp.config('lua_ls', {
 local cmp = require'cmp'
 
 cmp.setup({
+  -- Never preselect an item. rust-analyzer marks its best match as `preselect`,
+  -- which made Tab skip past it; with this, every server (clangd, rust-analyzer, ...)
+  -- opens the menu with nothing selected and the first Tab picks the first item.
+  preselect = cmp.PreselectMode.None,
+  completion = {
+    -- Keep automatic completion enabled for normal insert-mode text changes.
+    autocomplete = { cmp.TriggerEvent.TextChanged },
+  },
   snippet = {
     -- REQUIRED - you must specify a snippet engine
     expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      vim.snippet.expand(args.body) -- Native neovim snippets (Neovim v0.10+)
+      -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
       -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
       -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
       -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-      -- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
 
       -- For `mini.snippets` users:
       -- local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
@@ -1571,6 +1600,26 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
+
+    -- Re-query completions after Backspace while an identifier prefix remains.
+    -- This works for every configured source, including nvim_lsp, not just clangd.
+    ['<BS>'] = cmp.mapping(function(fallback)
+      fallback()
+      vim.schedule(function()
+        if vim.api.nvim_get_mode().mode:sub(1, 1) ~= 'i' then
+          return
+        end
+
+        local cursor = vim.api.nvim_win_get_cursor(0)
+        local line = vim.api.nvim_get_current_line()
+        local before_cursor = line:sub(1, cursor[2])
+        if before_cursor:match('[%w_]+$') then
+          cmp.complete()
+        else
+          cmp.close()
+        end
+      end)
+    end, { 'i' }),
     --['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -1589,7 +1638,9 @@ cmp.setup({
     end, { "i", "s" }),
 
     ['<CR>'] = cmp.mapping(function(fallback)
-      if cmp.visible() and cmp.get_selected_entry() then
+      -- get_active_entry() ignores preselected items (rust-analyzer preselects
+      -- type-matching ones), so Enter only confirms what was explicitly selected.
+      if cmp.visible() and cmp.get_active_entry() then
         cmp.confirm({ select = false })
       else
         fallback()
@@ -1597,6 +1648,7 @@ cmp.setup({
     end, { "i", "s" }),
   }),
   sources = cmp.config.sources({
+    { name = 'lazydev', group_index = 0 }, -- skip loading LuaLS completions
     { name = 'nvim_lsp' },
     {
       name = 'path',
@@ -1651,6 +1703,10 @@ cmp.event:on(
   'confirm_done',
   cmp_autopairs.on_confirm_done()
 )
+
+-- Keep nvim-cmp as the final listener for text-change events. This matters
+-- when other plugins also subscribe to TextChangedI/TextChangedP.
+cmp.resubscribe({ 'TextChangedI', 'TextChangedP' })
 
 
 -- Set up lspconfig.
@@ -2167,6 +2223,8 @@ require("noice").setup({
       ["vim.lsp.util.stylize_markdown"] = true,
       ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
     },
+    -- lspsaga already provides signature help; avoid showing it twice
+    signature = { enabled = false },
   },
   -- you can enable a preset for easier configuration
   presets = {
@@ -3014,27 +3072,34 @@ vim.filetype.add({
 -- Keymaps
 -- ===========================
 vim.cmd([[
-map <C-D> <ESC>:w<Enter>
+nmap <C-D> <ESC>:w<Enter>
+xmap <C-D> <ESC>:w<Enter>
 imap <C-D> <ESC>:w<Enter>
 
 "map <C-E> <ESC>:wqa<Enter>
 "imap <C-E> <ESC>:wqa<Enter>
 
-map <C-A> <ESC>ggVG<CR>
+nmap <C-A> <ESC>ggVG<CR>
+xmap <C-A> <ESC>ggVG<CR>
 imap <C-A> <ESC>ggVG<CR>
 
 nnoremap <silent> <C-L> :call SafeExitVim()<CR>
-map <C-Q> <ESC>:q!<Enter>
+nmap <C-Q> <ESC>:q!<Enter>
+xmap <C-Q> <ESC>:q!<Enter>
 
 " next tab
-map <S-Q> <ESC>:tabn<Enter>
+nmap <S-Q> <ESC>:tabn<Enter>
+xmap <S-Q> <ESC>:tabn<Enter>
 " previous tab
-map <S-Tab> <ESC>:tabp<Enter>
+nmap <S-Tab> <ESC>:tabp<Enter>
+xmap <S-Tab> <ESC>:tabp<Enter>
 
 " open new tab with NERDTree
-map <leader>[ <ESC>:tabnew<Enter><S-M><C-W>w
+nmap <leader>[ <ESC>:tabnew<Enter><S-M><C-W>w
+xmap <leader>[ <ESC>:tabnew<Enter><S-M><C-W>w
 " close the current tab
-map <leader>] <ESC>:tabclose<Enter>
+nmap <leader>] <ESC>:tabclose<Enter>
+xmap <leader>] <ESC>:tabclose<Enter>
 
 " In vim-floaterm normal mode, scroll 3 lines per keypress
 " by pressing j/k.
@@ -3073,15 +3138,19 @@ command! -nargs=1 Cmd echo system(<q-args>)
 
 command Pyrun :FloatermSend tput setaf 4 && echo "RUNNING...." && tput setaf 45 && python src/main.py
 
-map <C-]> <ESC>:Pyrun<Enter><C-\><C-N>:FloatermToggle<CR>
+nmap <C-]> <ESC>:Pyrun<Enter><C-\><C-N>:FloatermToggle<CR>
+xmap <C-]> <ESC>:Pyrun<Enter><C-\><C-N>:FloatermToggle<CR>
 "-------------------------
-map <S-T> <ESC>:LaunchFloaterm<Enter>
+nmap <S-T> <ESC>:LaunchFloaterm<Enter>
+xmap <S-T> <ESC>:LaunchFloaterm<Enter>
 " Enter into normal mode in floating terminal
 tnoremap <Esc><Esc> <C-\><C-n>
 tnoremap <leader><BS> <C-\><C-n>
 let g:floaterm_autoinsert = 'always'
-map <leader>\ :FloatermToggle<CR>
-map <leader><BS> :FloatermToggle<CR>lazygit<CR>
+nmap <leader>\ :FloatermToggle<CR>
+xmap <leader>\ :FloatermToggle<CR>
+nmap <leader><BS> :FloatermToggle<CR>lazygit<CR>
+xmap <leader><BS> :FloatermToggle<CR>lazygit<CR>
 "map <C-B> <ESC><S-T>bdrn<Enter>
 "map <C-B> <ESC>:FloatermToggle<Enter>bdrn<Enter>
 "tnoremap <C-S> <C-\><C-N>:FloatermToggle<CR>
@@ -3090,12 +3159,16 @@ imap <C-S> <C-\><C-N>
 nnoremap = $
 nnoremap - ^
 " Toggle spell check
-map <leader>d :setlocal spell!<CR>
+nmap <leader>d :setlocal spell!<CR>
+xmap <leader>d :setlocal spell!<CR>
 "map <leader> :wincmd =<CR>
-map <leader>t :Twilight<CR>
+nmap <leader>t :Twilight<CR>
+xmap <leader>t :Twilight<CR>
 
-map <M-.> :vert res +5<CR>
-map <M-,> :vert res -5<CR>
+nmap <M-.> :vert res +5<CR>
+xmap <M-.> :vert res +5<CR>
+nmap <M-,> :vert res -5<CR>
+xmap <M-,> :vert res -5<CR>
 ]])
 
 
