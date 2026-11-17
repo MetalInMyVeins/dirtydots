@@ -2,12 +2,12 @@
 
 mkdir -p $1
 cd $1
-cp -r ~/devel/langs/cpp/binary/include/ .
-cp -r ~/devel/langs/cpp/binary/src/ .
-cp ~/devel/langs/cpp/binary/Makefile .
-cp ~/devel/langs/cpp/binary/.clangd .
-cp ~/devel/langs/cpp/binary/.clang-format .
-cp ~/devel/langs/cpp/binary/.clang-tidy .
-cp ~/devel/langs/cpp/binary/.envrc .
-cp ~/devel/langs/cpp/binary/.gitignore .
+cp -r ~/devel/langs/cpp/bin-make/include/ .
+cp -r ~/devel/langs/cpp/bin-make/src/ .
+cp ~/devel/langs/cpp/bin-make/Makefile .
+cp ~/devel/langs/cpp/bin-make/.clangd .
+cp ~/devel/langs/cpp/bin-make/.clang-format .
+cp ~/devel/langs/cpp/bin-make/.clang-tidy .
+cp ~/devel/langs/cpp/bin-make/.envrc .
+cp ~/devel/langs/cpp/bin-make/.gitignore .
 direnv allow .
