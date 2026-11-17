@@ -23,6 +23,9 @@ rsync -av --delete ~/.config/neofetch ~/Backup/dirtydots/config
 
 mkdir -p ~/Backup/dirtydots/config/nvim
 rsync -av --delete ~/.config/nvim/init.lua ~/Backup/dirtydots/config/nvim/init.lua
+rsync -av --delete ~/.config/nvim/init.lua.2.bak ~/Backup/dirtydots/config/nvim/init.lua.2.bak
+rsync -av --delete ~/.config/nvim/init.lua.3.bak ~/Backup/dirtydots/config/nvim/init.lua.3.bak
+rsync -av --delete ~/.config/nvim/init.lua.4.bak ~/Backup/dirtydots/config/nvim/init.lua.4.bak
 
 rsync -av --delete ~/.config/rofi ~/Backup/dirtydots/config
 rsync -av --delete ~/.config/swaylock ~/Backup/dirtydots/config
