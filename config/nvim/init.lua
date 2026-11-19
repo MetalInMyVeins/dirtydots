@@ -1566,6 +1566,19 @@ vim.lsp.config('lua_ls', {
 -- Set up nvim-cmp.
 local cmp = require'cmp'
 
+-- Debounced completion re-trigger after Backspace
+local bs_timer = (vim.uv or vim.loop).new_timer()
+local function retrigger_after_bs()
+  if vim.api.nvim_get_mode().mode:sub(1, 1) ~= 'i' then return end
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local before = vim.api.nvim_get_current_line():sub(1, col)
+  if before:match('[%w_]+$') then
+    cmp.complete()
+  else
+    cmp.close()
+  end
+end
+
 cmp.setup({
   -- Never preselect an item. rust-analyzer marks its best match as `preselect`,
   -- which made Tab skip past it; with this, every server (clangd, rust-analyzer, ...)
@@ -1603,22 +1616,29 @@ cmp.setup({
 
     -- Re-query completions after Backspace while an identifier prefix remains.
     -- This works for every configured source, including nvim_lsp, not just clangd.
+    -- ['<BS>'] = cmp.mapping(function(fallback)
+    --   fallback()
+    --   vim.schedule(function()
+    --     if vim.api.nvim_get_mode().mode:sub(1, 1) ~= 'i' then
+    --       return
+    --     end
+    --
+    --     local cursor = vim.api.nvim_win_get_cursor(0)
+    --     local line = vim.api.nvim_get_current_line()
+    --     local before_cursor = line:sub(1, cursor[2])
+    --     if before_cursor:match('[%w_]+$') then
+    --       cmp.complete()
+    --     else
+    --       cmp.close()
+    --     end
+    --   end)
+    -- end, { 'i' }),
+    -- Re-query completions after Backspace, debounced so holding the key
+    -- triggers a single request after release instead of one per repeat.
     ['<BS>'] = cmp.mapping(function(fallback)
       fallback()
-      vim.schedule(function()
-        if vim.api.nvim_get_mode().mode:sub(1, 1) ~= 'i' then
-          return
-        end
-
-        local cursor = vim.api.nvim_win_get_cursor(0)
-        local line = vim.api.nvim_get_current_line()
-        local before_cursor = line:sub(1, cursor[2])
-        if before_cursor:match('[%w_]+$') then
-          cmp.complete()
-        else
-          cmp.close()
-        end
-      end)
+      bs_timer:stop()
+      bs_timer:start(120, 0, vim.schedule_wrap(retrigger_after_bs))
     end, { 'i' }),
     --['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     ['<Tab>'] = cmp.mapping(function(fallback)
