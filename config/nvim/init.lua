@@ -1449,7 +1449,7 @@ vim.lsp.enable('rust_analyzer')
 -- that support textDocument/inlayHint, regardless of language or server name.
 -- Omitting the buffer filter applies this preference to all current and future
 -- buffers.
-vim.lsp.inlay_hint.enable(true)
+vim.lsp.inlay_hint.enable(false)
 
 -- These commands control inlay hints globally, across all buffers.
 local function set_inlay_hints(enabled)
