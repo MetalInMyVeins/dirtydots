@@ -1801,10 +1801,10 @@ require('lspsaga').setup(
   {
     enable = true,
   },
-  signature_help =
-  {
-    enable = true,
-  },
+  -- signature_help =
+  -- {
+  --   enable = true,
+  -- },
 })
 
 -- view docs: <leader>'
@@ -2243,8 +2243,7 @@ require("noice").setup({
       ["vim.lsp.util.stylize_markdown"] = true,
       ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
     },
-    -- lspsaga already provides signature help; avoid showing it twice
-    signature = { enabled = false },
+    signature = { enabled = true },
   },
   -- you can enable a preset for easier configuration
   presets = {
