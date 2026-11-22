@@ -1819,6 +1819,31 @@ vim.keymap.set("i", "<C-E>", function()
   end
 end, { desc = "Close floating windows" })
 
+-- Close the hover popup with `q` from the code window.
+-- Falls back to normal `q` (macro recording) when no hover is open.
+local keep_open = { floaterm = true, noice = true, notify = true, NvimTree = true }
+
+local function close_hover()
+  local closed = false
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_config(win).relative ~= "" then
+      local ft = vim.bo[vim.api.nvim_win_get_buf(win)].filetype
+      if not keep_open[ft] then
+        vim.api.nvim_win_close(win, false)
+        closed = true
+      end
+    end
+  end
+  return closed
+end
+
+vim.keymap.set("n", "q", function()
+  if vim.fn.reg_recording() ~= "" or not close_hover() then
+    vim.api.nvim_feedkeys("q", "n", false)
+  end
+end, { desc = "Close hover popup, else normal q" })
+
+
 
 -- code actions: <leader>a (normal = at cursor, visual = on selection)
 vim.keymap.set('n', '<leader>a', function()
